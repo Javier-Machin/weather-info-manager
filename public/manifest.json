@@ -1,6 +1,6 @@
 {
   "short_name": "Weather Info",
-  "name": "Weather Info Management",
+  "name": "Weather Info Manager",
   "icons": [],
   "start_url": ".",
   "display": "standalone",

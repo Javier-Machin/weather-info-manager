@@ -2,21 +2,30 @@ import React from 'react';
 import '../styles/CityRow.scss';
 
 interface CityRowProps {
-  onClick?: () => void;
-  onKeyPress?: () => void;
+  onClick?: (target: any) => void;
+  onKeyPress?: (target: any) => void;
+  location: string;
+  temp: number;
 }
 
 const CityRow: React.FC<CityRowProps> = (props) => {
+  const { location, temp, onClick, onKeyPress } = props;
+
   const handleClick = (event: React.MouseEvent) => {
-    const target = event.target as HTMLElement;
-    console.log(target.id);
+    if (onClick) {
+      const target = event.currentTarget as HTMLElement;
+      onClick(target);
+    }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
     const keyPressed = event.key;
-
-    if (keyPressed === 'Enter') {
-      console.log(keyPressed);
+    if (
+      (onKeyPress || onClick) &&
+      (keyPressed === 'Enter' || keyPressed === ' ')
+    ) {
+      const target = event.currentTarget as HTMLElement;
+      onKeyPress ? onKeyPress(target) : onClick!(target);
     }
   };
 
@@ -26,9 +35,10 @@ const CityRow: React.FC<CityRowProps> = (props) => {
       onClick={handleClick}
       onKeyPress={handleKeyPress}
       className="city-row"
+      id="london"
     >
-      <span>London</span>
-      <span>23ºC</span>
+      <span>{location}</span>
+      <span>{`${temp} ºC`}</span>
     </div>
   );
 };
