@@ -1,0 +1,8 @@
+.city-row {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.city-row:focus {
+  outline: 1px solid black;
+}
