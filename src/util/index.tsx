@@ -6,12 +6,12 @@ const formatWeatherData = (weatherData: WeatherDataResponse[]) => {
   return weatherData.map((data) => {
     return {
       location: data.name,
-      temp: data.main.temp,
-      tempFeeling: data.main.feels_like,
-      tempMax: data.main.temp_max,
-      tempMin: data.main.temp_min,
+      temp: Math.round(data.main.temp),
+      tempFeeling: Math.round(data.main.feels_like),
+      tempMax: Math.round(data.main.temp_max),
+      tempMin: Math.round(data.main.temp_min),
       clouds: data.clouds.all,
-      windSpeed: data.wind.speed * 3.6, // convert to Km/h
+      windSpeed: Math.round(data.wind.speed * 3.6), // convert to Km/h
       description: data.weather[0].description,
       favorite: false,
     };

@@ -36,8 +36,7 @@ function handleRequestError(error: Error): ErrorMessage {
     };
   } else {
     return {
-      error:
-        'Sorry, the weather service is not available right now, try again later',
+      error: 'Sorry, the weather service is not available right now, try again later',
     };
   }
 }

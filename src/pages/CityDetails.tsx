@@ -1,11 +1,15 @@
 import React from 'react';
 import { FormattedWeatherData } from '../models';
 import '../styles/CityDetails.scss';
-import CityNotes from './CityNotes';
+import CityNotes from '../components/CityNotes';
 
 interface CityDetailsProps {
   weatherData?: FormattedWeatherData;
 }
+
+// Add option to add city to list, search reroutes to this page
+
+// Replace location spaces with -
 
 const CityDetails: React.FC<CityDetailsProps> = (props) => {
   const { weatherData } = props;
@@ -29,7 +33,7 @@ const CityDetails: React.FC<CityDetailsProps> = (props) => {
       <span>Temperature: {temp}ºC</span>
       <span>Temperature feeling: {tempFeeling}ºC</span>
       <span>Temperature minimum: {tempMin}ºC</span>
-      <span>Temperature max: {tempMax}ºC</span>
+      <span>Temperature maximum: {tempMax}ºC</span>
       <span>Weather description: {description}</span>
       <span>Wind speed: {windSpeed} Km/h</span>
       <CityNotes location={location} />

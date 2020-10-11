@@ -12,10 +12,8 @@ import '../styles/App.scss';
 
 // Interfaces
 import { FormattedWeatherData, ErrorMessage } from '../models';
-import CityDetails from './CityDetails';
 
 const App: React.FC = () => {
-  const [selectedCity, setSelectedCity] = useState<FormattedWeatherData | null>(null);
   const [weatherData, setWeatherData] = useState<FormattedWeatherData[]>([]);
   const [serviceError, setServiceError] = useState<ErrorMessage | null>(null);
 
@@ -47,10 +45,11 @@ const App: React.FC = () => {
     console.log(serviceError);
   }
 
+  // Implement citydetails through a route, with the location as param
+
   return (
     <main className="App">
       <CityList listWeatherData={weatherData} />
-      <CityDetails weatherData={weatherData[0]} />
     </main>
   );
 };
