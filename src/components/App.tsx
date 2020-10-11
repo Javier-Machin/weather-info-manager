@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import CityList from './CityList';
+import CityNotes from './CityNotes';
+import CityDetails from './CityDetails';
 import { requestListWeatherData } from '../service';
 import {
   formatWeatherData,
@@ -14,6 +16,7 @@ import '../styles/App.scss';
 import { FormattedWeatherData, ErrorMessage } from '../models';
 
 const App: React.FC = () => {
+  const [selectedCity, setSelectedCity] = useState<FormattedWeatherData | null>(null);
   const [weatherData, setWeatherData] = useState<FormattedWeatherData[]>([]);
   const [serviceError, setServiceError] = useState<ErrorMessage | null>(null);
 
@@ -45,11 +48,18 @@ const App: React.FC = () => {
     console.log(serviceError);
   }
 
-  // Implement citydetails through a route, with the location as param
-
   return (
     <main className="App">
-      <CityList listWeatherData={weatherData} />
+      <h3 className="main-title">Weather Info Manager</h3>
+      <button>Check weather for my location</button>
+      {selectedCity ? (
+        <Fragment>
+          <CityDetails setSelectedCity={setSelectedCity} weatherData={selectedCity} />
+          <CityNotes cityName={selectedCity.name} />
+        </Fragment>
+      ) : (
+        <CityList setSelectedCity={setSelectedCity} listWeatherData={weatherData} />
+      )}
     </main>
   );
 };

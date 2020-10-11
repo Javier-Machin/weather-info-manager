@@ -1,15 +1,15 @@
 import React from 'react';
-import '../styles/CityRow.scss';
+import '../../styles/CityList/CityRow.scss';
 
 interface CityRowProps {
   onClick?: (target: string) => void;
   onKeyPress?: (target: string) => void;
-  location: string;
+  name: string;
   temp: number;
 }
 
 const CityRow: React.FC<CityRowProps> = (props) => {
-  const { location, temp, onClick, onKeyPress } = props;
+  const { name, temp, onClick, onKeyPress } = props;
 
   const handleClick = (event: React.MouseEvent) => {
     if (onClick) {
@@ -20,10 +20,7 @@ const CityRow: React.FC<CityRowProps> = (props) => {
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
     const keyPressed = event.key;
-    if (
-      (onKeyPress || onClick) &&
-      (keyPressed === 'Enter' || keyPressed === ' ')
-    ) {
+    if ((onKeyPress || onClick) && (keyPressed === 'Enter' || keyPressed === ' ')) {
       const target = event.currentTarget.id as string;
       onKeyPress ? onKeyPress(target) : onClick!(target);
     }
@@ -35,9 +32,9 @@ const CityRow: React.FC<CityRowProps> = (props) => {
       onClick={handleClick}
       onKeyPress={handleKeyPress}
       className="city-row"
-      id={location}
+      id={name}
     >
-      <span>{location}</span>
+      <span>{name}</span>
       <span>{`${temp} ºC`}</span>
     </div>
   );

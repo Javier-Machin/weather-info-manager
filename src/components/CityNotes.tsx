@@ -3,12 +3,12 @@ import '../styles/CityNotes.scss';
 import TextArea from './TextArea';
 
 interface CityNotesProps {
-  location?: string;
+  cityName?: string;
 }
 
 const CityNotes: React.FC<CityNotesProps> = (props) => {
-  const { location } = props;
-  if (!location) return null;
+  const { cityName } = props;
+  if (!cityName) return null;
 
   // get notes here and map through them in render
 

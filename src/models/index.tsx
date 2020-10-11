@@ -16,7 +16,7 @@ export interface WeatherDataResponse {
 }
 
 export interface FormattedWeatherData {
-  location: string;
+  name: string;
   temp: number;
   tempFeeling: number;
   tempMax: number;
