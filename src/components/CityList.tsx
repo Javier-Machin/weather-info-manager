@@ -16,7 +16,9 @@ const CityList: React.FC<CityListProps> = (props) => {
   return (
     <section className="city-list">
       {weatherDataSorted.map(({ location, temp }) => {
-        return <CityRow key={uuidv4()} location={location} temp={temp} />;
+        return (
+          <CityRow key={uuidv4()} location={location} temp={Math.round(temp)} />
+        );
       })}
     </section>
   );

@@ -1,3 +1,4 @@
+// Interfaces and Types used in more than one place
 export interface WeatherDataResponse {
   clouds: { all: number };
   main: {
@@ -23,4 +24,9 @@ export interface FormattedWeatherData {
   clouds: number;
   windSpeed: number;
   description: string;
+  favorite: boolean;
+}
+
+export interface ErrorMessage {
+  error: string;
 }

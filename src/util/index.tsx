@@ -1,6 +1,7 @@
 import { WeatherDataResponse, FormattedWeatherData } from '../models';
 
 // Remove not needed keys and improve format
+
 const formatWeatherData = (weatherData: WeatherDataResponse[]) => {
   return weatherData.map((data) => {
     return {
@@ -12,6 +13,7 @@ const formatWeatherData = (weatherData: WeatherDataResponse[]) => {
       clouds: data.clouds.all,
       windSpeed: data.wind.speed * 3.6, // convert to Km/h
       description: data.weather[0].description,
+      favorite: false,
     };
   }) as FormattedWeatherData[];
 };
@@ -20,6 +22,7 @@ const formatWeatherData = (weatherData: WeatherDataResponse[]) => {
   Mapping between the top 15 cities by population and their ID in the weather service,
   required to get weather data for all of them in a single request.
 */
+
 const listCitiesIdMap = {
   tokyo: 1850147,
   delhi: 1273294,
@@ -38,4 +41,34 @@ const listCitiesIdMap = {
   kolkata: 1275004,
 };
 
-export { listCitiesIdMap, formatWeatherData };
+// LocalStorage API handling
+
+// Check if the localStorage API is available
+
+const localStorageAvailable = () => {
+  const test = 'test';
+  try {
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+const saveDataToLocal = (data: FormattedWeatherData[]) => {
+  localStorage.setItem('weatherData', JSON.stringify(data));
+};
+
+const getDataFromLocal = () => {
+  const data = localStorage.getItem('weatherData');
+  return data ? (JSON.parse(data) as FormattedWeatherData[]) : null;
+};
+
+export {
+  listCitiesIdMap,
+  formatWeatherData,
+  localStorageAvailable,
+  saveDataToLocal,
+  getDataFromLocal,
+};

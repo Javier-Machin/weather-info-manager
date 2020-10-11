@@ -1,12 +1,7 @@
-// Fetch weather data using openweathermap API
 import Axios from 'axios';
-import { WeatherDataResponse } from '../models';
+import { WeatherDataResponse, ErrorMessage } from '../models';
 
 const SERVICE_URL = 'https://api.openweathermap.org/data/2.5/';
-
-interface ErrorMessage {
-  error: string;
-}
 
 const requestWeatherData = async (location: string) => {
   const formattedLocation = location.trim().toLowerCase();

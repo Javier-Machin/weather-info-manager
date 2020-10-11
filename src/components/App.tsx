@@ -1,26 +1,49 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import CityList from './CityList';
-import { FormattedWeatherData } from '../models';
-import { formatWeatherData, listCitiesIdMap } from '../util';
-import { requestWeatherData, requestListWeatherData } from '../service';
+import { requestListWeatherData } from '../service';
+import {
+  formatWeatherData,
+  getDataFromLocal,
+  listCitiesIdMap,
+  localStorageAvailable,
+  saveDataToLocal,
+} from '../util';
 import '../styles/App.scss';
+
+// Interfaces
+import { FormattedWeatherData, ErrorMessage } from '../models';
 
 const App: React.FC = () => {
   const [weatherData, setWeatherData] = useState<FormattedWeatherData[]>([]);
+  const [serviceError, setServiceError] = useState<ErrorMessage | null>(null);
 
   const handleRequestListWeather = useCallback(async () => {
-    const citiesIdArray = Object.values(listCitiesIdMap);
-    const listWeatherData = await requestListWeatherData(citiesIdArray);
+    const listCitiesIds = Object.values(listCitiesIdMap);
+    const serviceResponse = await requestListWeatherData(listCitiesIds);
 
-    if (Array.isArray(listWeatherData)) {
-      const formattedData = formatWeatherData(listWeatherData);
+    if (Array.isArray(serviceResponse)) {
+      const formattedData = formatWeatherData(serviceResponse);
+      saveDataToLocal(formattedData);
       setWeatherData(formattedData);
+      return;
+    } else if (localStorageAvailable()) {
+      const localWeatherData = getDataFromLocal();
+      if (localWeatherData) {
+        setWeatherData(localWeatherData);
+        return;
+      }
     }
+
+    setServiceError(serviceResponse);
   }, []);
 
   useEffect(() => {
-    // handleRequestListWeather();
+    handleRequestListWeather();
   }, [handleRequestListWeather]);
+
+  if (serviceError) {
+    console.log(serviceError);
+  }
 
   return (
     <main className="App">
