@@ -12,6 +12,7 @@ import '../styles/App.scss';
 
 // Interfaces
 import { FormattedWeatherData, ErrorMessage } from '../models';
+import CityDetails from './CityDetails';
 
 const App: React.FC = () => {
   const [weatherData, setWeatherData] = useState<FormattedWeatherData[]>([]);
@@ -47,7 +48,8 @@ const App: React.FC = () => {
 
   return (
     <main className="App">
-      <CityList weatherData={weatherData} />
+      <CityList listWeatherData={weatherData} />
+      <CityDetails weatherData={weatherData[0]} />
     </main>
   );
 };
