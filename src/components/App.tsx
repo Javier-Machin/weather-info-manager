@@ -15,6 +15,7 @@ import { FormattedWeatherData, ErrorMessage } from '../models';
 import CityDetails from './CityDetails';
 
 const App: React.FC = () => {
+  const [selectedCity, setSelectedCity] = useState<FormattedWeatherData | null>(null);
   const [weatherData, setWeatherData] = useState<FormattedWeatherData[]>([]);
   const [serviceError, setServiceError] = useState<ErrorMessage | null>(null);
 
