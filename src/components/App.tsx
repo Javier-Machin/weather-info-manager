@@ -38,11 +38,11 @@ const App: React.FC = () => {
           const formattedData = formatWeatherData(serviceResponse);
           saveDataToLocal('weatherData', formattedData);
           setWeatherData(formattedData);
-          return;
         } else {
           // If the local data can't be updated, load the last known data
           setWeatherData(localWeatherData);
         }
+        return;
       }
     }
 
@@ -90,6 +90,14 @@ const App: React.FC = () => {
     setWeatherData(updatedCities);
   };
 
+  const handleToggleCityFavorite = (cityName: string) => {
+    const cityToUpdateIndex = weatherData.findIndex((city) => city.name === cityName);
+    const updatedCities = [...weatherData];
+    updatedCities[cityToUpdateIndex].favorite = !weatherData[cityToUpdateIndex].favorite;
+    saveDataToLocal('weatherData', updatedCities);
+    setWeatherData(updatedCities);
+  };
+
   useEffect(() => {
     handleRequestListWeather();
   }, [handleRequestListWeather]);
@@ -133,6 +141,7 @@ const App: React.FC = () => {
         </Fragment>
       ) : (
         <CityList
+          toggleCityFavorite={handleToggleCityFavorite}
           deleteCityFromList={handleDeleteCityFromList}
           setSelectedCity={setSelectedCity}
           listWeatherData={weatherData}

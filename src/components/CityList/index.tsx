@@ -8,13 +8,19 @@ interface CityListProps {
   listWeatherData: FormattedWeatherData[];
   setSelectedCity: React.Dispatch<FormattedWeatherData | null>;
   deleteCityFromList: (cityName: string) => void;
+  toggleCityFavorite: (cityName: string) => void;
 }
 
 const CityList: React.FC<CityListProps> = (props) => {
-  const { listWeatherData, setSelectedCity, deleteCityFromList } = props;
-  const listWeatherDataSorted = listWeatherData.sort((cityA, cityB) =>
-    cityA.name.localeCompare(cityB.name)
-  );
+  const { listWeatherData, setSelectedCity, deleteCityFromList, toggleCityFavorite } = props;
+
+  const favoriteCities = listWeatherData
+    .filter((city) => city.favorite)
+    .sort((cityA, cityB) => cityA.name.localeCompare(cityB.name));
+
+  const regularCities = listWeatherData
+    .filter((city) => !city.favorite)
+    .sort((cityA, cityB) => cityA.name.localeCompare(cityB.name));
 
   const handleSelectCity = (name: string) => {
     const selectedCity = listWeatherData.find((city) => city.name === name);
@@ -23,14 +29,29 @@ const CityList: React.FC<CityListProps> = (props) => {
 
   return (
     <section className="city-list">
-      {listWeatherDataSorted.map(({ name, temp }) => {
+      {favoriteCities.map(({ name, temp, favorite }) => {
         return (
           <CityRow
             key={uuidv4()}
             name={name}
             temp={temp}
+            favorite={favorite}
             onClick={handleSelectCity}
             deleteCityFromList={deleteCityFromList}
+            toggleCityFavorite={toggleCityFavorite}
+          />
+        );
+      })}
+      {regularCities.map(({ name, temp, favorite }) => {
+        return (
+          <CityRow
+            key={uuidv4()}
+            name={name}
+            temp={temp}
+            favorite={favorite}
+            onClick={handleSelectCity}
+            deleteCityFromList={deleteCityFromList}
+            toggleCityFavorite={toggleCityFavorite}
           />
         );
       })}
