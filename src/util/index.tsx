@@ -3,7 +3,7 @@ import { WeatherDataResponse, FormattedWeatherData } from '../models';
 // Remove not needed keys and improve format
 
 const formatWeatherData = (weatherData: WeatherDataResponse[]) => {
-  return weatherData.map((data) => {
+  const formattedData: FormattedWeatherData[] = weatherData.map((data) => {
     return {
       cityId: data.id,
       name: data.name,
@@ -16,7 +16,9 @@ const formatWeatherData = (weatherData: WeatherDataResponse[]) => {
       description: data.weather[0].description,
       favorite: false,
     };
-  }) as FormattedWeatherData[];
+  });
+  const formattedDataWithFavorites = setFavoritesFromLocal(formattedData);
+  return formattedDataWithFavorites;
 };
 
 /*
@@ -72,6 +74,24 @@ const getWeatherFromLocal = () => {
 const getNotesFromLocal = () => {
   let data = localStorage.getItem('notes');
   return data ? (JSON.parse(data) as { id: string; value: string; location: string }[]) : null;
+};
+
+const setFavoritesFromLocal = (data: FormattedWeatherData[]) => {
+  const localWeatherData = getWeatherFromLocal();
+  let localCitiesFavorites: string[] = [];
+
+  if (localWeatherData) {
+    localCitiesFavorites = localWeatherData
+      .filter((city) => city.favorite)
+      .map((city) => city.name);
+
+    return data.map((city) => {
+      city.favorite = localCitiesFavorites.includes(city.name);
+      return city;
+    });
+  }
+
+  return data;
 };
 
 const getUserCoordinates = () => {
