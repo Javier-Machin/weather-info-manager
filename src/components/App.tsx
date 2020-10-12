@@ -5,7 +5,7 @@ import CityDetails from './CityDetails';
 import { requestListWeatherData, requestWeatherByCoords } from '../service';
 import {
   formatWeatherData,
-  getDataFromLocal,
+  getWeatherFromLocal,
   getUserCoordinates,
   listCitiesIdMap,
   localStorageAvailable,
@@ -27,11 +27,11 @@ const App: React.FC = () => {
 
     if (Array.isArray(serviceResponse)) {
       const formattedData = formatWeatherData(serviceResponse);
-      saveDataToLocal(formattedData);
+      saveDataToLocal('weatherData', formattedData);
       setWeatherData(formattedData);
       return;
     } else if (localStorageAvailable()) {
-      const localWeatherData = getDataFromLocal();
+      const localWeatherData = getWeatherFromLocal();
       if (localWeatherData) {
         setWeatherData(localWeatherData);
         return;
@@ -41,13 +41,9 @@ const App: React.FC = () => {
     setErrorMessage(serviceResponse);
   }, []);
 
-  useEffect(() => {
-    handleRequestListWeather();
-  }, [handleRequestListWeather]);
-
   const handleUserLocationWeather = async () => {
+    const locationResponse = await getUserCoordinates();
     let serviceResponse;
-    const locationResponse: any = await getUserCoordinates();
 
     if (Array.isArray(locationResponse)) {
       serviceResponse = await requestWeatherByCoords(locationResponse[0]);
@@ -60,6 +56,10 @@ const App: React.FC = () => {
     // If we reach this we either have a service error or a location error
     serviceResponse ? setErrorMessage(serviceResponse) : setErrorMessage(locationResponse);
   };
+
+  useEffect(() => {
+    handleRequestListWeather();
+  }, [handleRequestListWeather]);
 
   if (errorMessage) {
     console.log(errorMessage);

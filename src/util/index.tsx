@@ -56,17 +56,25 @@ const localStorageAvailable = () => {
   }
 };
 
-const saveDataToLocal = (data: FormattedWeatherData[]) => {
-  localStorage.setItem('weatherData', JSON.stringify(data));
+const saveDataToLocal = (
+  key: string,
+  data: FormattedWeatherData[] | { id: string; value: string; location: string }[]
+) => {
+  localStorage.setItem(key, JSON.stringify(data));
 };
 
-const getDataFromLocal = () => {
-  const data = localStorage.getItem('weatherData');
+const getWeatherFromLocal = () => {
+  let data = localStorage.getItem('weatherData');
   return data ? (JSON.parse(data) as FormattedWeatherData[]) : null;
 };
 
+const getNotesFromLocal = () => {
+  let data = localStorage.getItem('notes');
+  return data ? (JSON.parse(data) as { id: string; value: string; location: string }[]) : null;
+};
+
 const getUserCoordinates = () => {
-  return new Promise((resolve, _) => {
+  return new Promise<any>((resolve, _) => {
     const options = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -90,6 +98,7 @@ export {
   formatWeatherData,
   localStorageAvailable,
   saveDataToLocal,
-  getDataFromLocal,
+  getWeatherFromLocal,
+  getNotesFromLocal,
   getUserCoordinates,
 };

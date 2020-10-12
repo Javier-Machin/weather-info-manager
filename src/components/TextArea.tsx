@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import '../styles/TextArea.scss';
 
 interface TextAreaProps {
+  id: string;
   initialValue?: string;
   placeholder?: string;
-  // handleUpdateNotes: (id: string, value: string) => void;
+  handleUpdateLocalNotes: (id: string, value: string) => void;
 }
 
 const TextArea: React.FC<TextAreaProps> = (props) => {
-  const { initialValue = '', placeholder = '' } = props;
+  const { initialValue = '', placeholder = '', id, handleUpdateLocalNotes } = props;
   const [value, setValue] = useState(initialValue);
 
   const handleOnChange = (event: React.ChangeEvent) => {
     const target = event.target as HTMLTextAreaElement;
     const newValue = target.value;
     setValue(newValue);
+    handleUpdateLocalNotes(id, newValue);
   };
 
   return (
