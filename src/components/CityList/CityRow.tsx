@@ -2,40 +2,24 @@ import React from 'react';
 import '../../styles/CityList/CityRow.scss';
 
 interface CityRowProps {
-  onClick?: (target: string) => void;
-  onKeyPress?: (target: string) => void;
+  onClick: (target: string) => void;
+  deleteCityFromList: (cityName: string) => void;
   name: string;
   temp: number;
 }
 
 const CityRow: React.FC<CityRowProps> = (props) => {
-  const { name, temp, onClick, onKeyPress } = props;
-
-  const handleClick = (event: React.MouseEvent) => {
-    if (onClick) {
-      const target = event.currentTarget.id as string;
-      onClick(target);
-    }
-  };
-
-  const handleKeyPress = (event: React.KeyboardEvent) => {
-    const keyPressed = event.key;
-    if ((onKeyPress || onClick) && (keyPressed === 'Enter' || keyPressed === ' ')) {
-      const target = event.currentTarget.id as string;
-      onKeyPress ? onKeyPress(target) : onClick!(target);
-    }
-  };
+  const { name, temp, onClick, deleteCityFromList } = props;
 
   return (
-    <div
-      tabIndex={0}
-      onClick={handleClick}
-      onKeyPress={handleKeyPress}
-      className="city-row"
-      id={name}
-    >
-      <span>{name}</span>
+    <div className="city-row" id={name}>
+      <button onClick={onClick!.bind(null, name)} type="button">
+        {name}
+      </button>
       <span>{`${temp} ºC`}</span>
+      <button type="button" onClick={deleteCityFromList.bind(null, name)}>
+        Remove
+      </button>
     </div>
   );
 };

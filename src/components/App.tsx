@@ -54,7 +54,7 @@ const App: React.FC = () => {
         return;
       }
     }
-    // If we reach this we either have a service error or a location error
+    // If we reach this we have a service error or a location error
     serviceResponse ? setErrorMessage(serviceResponse) : setErrorMessage(locationResponse);
   };
 
@@ -64,15 +64,23 @@ const App: React.FC = () => {
     setWeatherData(updatedCities);
   };
 
+  const handleDeleteCityFromList = (cityName: string) => {
+    const updatedCities = weatherData.filter((city) => city.name !== cityName);
+    saveDataToLocal('weatherData', updatedCities);
+    setWeatherData(updatedCities);
+  };
+
   useEffect(() => {
     handleRequestListWeather();
   }, [handleRequestListWeather]);
 
+  const cityPresentInList = (name: string) => {
+    return !!weatherData.find((city) => city.name === name);
+  };
+
   if (errorMessage) {
     console.log(errorMessage);
   }
-
-  // TODO Implement add from details to list
 
   // TODO Implement remove from list
 
@@ -99,13 +107,18 @@ const App: React.FC = () => {
         <Fragment>
           <CityDetails
             addCityToList={handleAddCityToList}
+            cityPresentInList={cityPresentInList}
             setSelectedCity={setSelectedCity}
             weatherData={selectedCity}
           />
           <CityNotes cityName={selectedCity.name} />
         </Fragment>
       ) : (
-        <CityList setSelectedCity={setSelectedCity} listWeatherData={weatherData} />
+        <CityList
+          deleteCityFromList={handleDeleteCityFromList}
+          setSelectedCity={setSelectedCity}
+          listWeatherData={weatherData}
+        />
       )}
     </main>
   );

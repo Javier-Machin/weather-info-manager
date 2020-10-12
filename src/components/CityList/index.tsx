@@ -7,10 +7,11 @@ import '../../styles/CityList/CityList.scss';
 interface CityListProps {
   listWeatherData: FormattedWeatherData[];
   setSelectedCity: React.Dispatch<FormattedWeatherData | null>;
+  deleteCityFromList: (cityName: string) => void;
 }
 
 const CityList: React.FC<CityListProps> = (props) => {
-  const { listWeatherData, setSelectedCity } = props;
+  const { listWeatherData, setSelectedCity, deleteCityFromList } = props;
   const listWeatherDataSorted = listWeatherData.sort((cityA, cityB) =>
     cityA.name.localeCompare(cityB.name)
   );
@@ -23,7 +24,15 @@ const CityList: React.FC<CityListProps> = (props) => {
   return (
     <section className="city-list">
       {listWeatherDataSorted.map(({ name, temp }) => {
-        return <CityRow key={uuidv4()} name={name} temp={temp} onClick={handleSelectCity} />;
+        return (
+          <CityRow
+            key={uuidv4()}
+            name={name}
+            temp={temp}
+            onClick={handleSelectCity}
+            deleteCityFromList={deleteCityFromList}
+          />
+        );
       })}
     </section>
   );
