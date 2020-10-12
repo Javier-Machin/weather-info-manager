@@ -114,10 +114,12 @@ const getUserCoordinates = () => {
   });
 };
 
+const localAvailable = localStorageAvailable();
+
 export {
   listCitiesIdMap,
+  localAvailable,
   formatWeatherData,
-  localStorageAvailable,
   saveDataToLocal,
   getWeatherFromLocal,
   getNotesFromLocal,

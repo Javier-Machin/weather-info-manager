@@ -9,8 +9,8 @@ import {
   getWeatherFromLocal,
   getUserCoordinates,
   listCitiesIdMap,
-  localStorageAvailable,
   saveDataToLocal,
+  localAvailable,
 } from '../util';
 import '../styles/App.scss';
 
@@ -26,8 +26,6 @@ const App: React.FC = () => {
 
   const handleRequestListWeather = useCallback(async () => {
     setErrorMessage(null);
-    const localAvailable = localStorageAvailable();
-
     if (localAvailable) {
       const localWeatherData = getWeatherFromLocal();
 
@@ -85,13 +83,13 @@ const App: React.FC = () => {
 
   const handleAddCityToList = (city: FormattedWeatherData) => {
     const updatedCities = [...weatherData, city];
-    saveDataToLocal('weatherData', updatedCities);
+    if (localAvailable) saveDataToLocal('weatherData', updatedCities);
     setWeatherData(updatedCities);
   };
 
   const handleDeleteCityFromList = (cityName: string) => {
     const updatedCities = weatherData.filter((city) => city.name !== cityName);
-    saveDataToLocal('weatherData', updatedCities);
+    if (localAvailable) saveDataToLocal('weatherData', updatedCities);
     setWeatherData(updatedCities);
   };
 
@@ -99,7 +97,7 @@ const App: React.FC = () => {
     const cityToUpdateIndex = weatherData.findIndex((city) => city.name === cityName);
     const updatedCities = [...weatherData];
     updatedCities[cityToUpdateIndex].favorite = !weatherData[cityToUpdateIndex].favorite;
-    saveDataToLocal('weatherData', updatedCities);
+    if (localAvailable) saveDataToLocal('weatherData', updatedCities);
     setWeatherData(updatedCities);
   };
 

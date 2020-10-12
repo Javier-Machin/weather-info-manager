@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { FaTrashAlt, FaPlusCircle } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
-import { getNotesFromLocal, saveDataToLocal } from '../util';
+import { getNotesFromLocal, saveDataToLocal, localAvailable } from '../util';
 import TextArea from './TextArea';
 import '../styles/CityNotes.scss';
 import Button from './Button';
@@ -22,10 +22,10 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
     const newNote = { id: uuidv4(), value: '', location: cityName };
 
     if (!notes) {
-      saveDataToLocal('notes', [newNote]);
+      if (localAvailable) saveDataToLocal('notes', [newNote]);
       setNotes([newNote]);
     } else {
-      saveDataToLocal('notes', [newNote, ...notes]);
+      if (localAvailable) saveDataToLocal('notes', [newNote, ...notes]);
       setNotes([newNote, ...notes]);
     }
   };
@@ -33,12 +33,12 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
   const handleUpdateLocalNotes = debounce((id: string, value: string) => {
     const noteIndex = notes!.findIndex((note) => note.id === id);
     notes![noteIndex].value = value;
-    saveDataToLocal('notes', [...notes!]);
+    if (localAvailable) saveDataToLocal('notes', [...notes!]);
   }, 150);
 
   const handleDeleteNote = (id: string) => {
     const updatedNotes = notes!.filter((note) => note.id !== id);
-    saveDataToLocal('notes', updatedNotes);
+    if (localAvailable) saveDataToLocal('notes', updatedNotes);
     setNotes(updatedNotes);
   };
 
