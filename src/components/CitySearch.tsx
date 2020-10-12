@@ -12,7 +12,7 @@ interface CitySearchProps {
 }
 
 const CitySearch: React.FC<CitySearchProps> = (props) => {
-  const { placeholder = '', setSelectedCity, setErrorMessage } = props;
+  const { placeholder = 'Enter a city', setSelectedCity, setErrorMessage } = props;
   const [value, setValue] = useState('');
 
   const handleOnChange = (event: React.ChangeEvent) => {
@@ -28,6 +28,7 @@ const CitySearch: React.FC<CitySearchProps> = (props) => {
 
     if (Array.isArray(serviceResponse)) {
       const formattedData = formatWeatherData(serviceResponse);
+      setValue('');
       setSelectedCity(formattedData[0]);
     } else {
       setErrorMessage(serviceResponse);
