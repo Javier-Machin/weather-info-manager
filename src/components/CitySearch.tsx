@@ -27,10 +27,9 @@ const CitySearch: React.FC<CitySearchProps> = (props) => {
     if (Array.isArray(serviceResponse)) {
       const formattedData = formatWeatherData(serviceResponse);
       setSelectedCity(formattedData[0]);
-      return;
+    } else {
+      setErrorMessage(serviceResponse);
     }
-    // If we reach this we have a service error
-    setErrorMessage(serviceResponse);
   };
 
   return (

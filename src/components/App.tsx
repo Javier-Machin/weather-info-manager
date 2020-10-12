@@ -58,6 +58,12 @@ const App: React.FC = () => {
     serviceResponse ? setErrorMessage(serviceResponse) : setErrorMessage(locationResponse);
   };
 
+  const handleAddCityToList = (city: FormattedWeatherData) => {
+    const updatedCities = [...weatherData, city];
+    saveDataToLocal('weatherData', updatedCities);
+    setWeatherData(updatedCities);
+  };
+
   useEffect(() => {
     handleRequestListWeather();
   }, [handleRequestListWeather]);
@@ -65,7 +71,6 @@ const App: React.FC = () => {
   if (errorMessage) {
     console.log(errorMessage);
   }
-  // TODO Implement search
 
   // TODO Implement add from details to list
 
@@ -92,7 +97,11 @@ const App: React.FC = () => {
       <button onClick={handleUserLocationWeather}>Check weather for my location</button>
       {selectedCity ? (
         <Fragment>
-          <CityDetails setSelectedCity={setSelectedCity} weatherData={selectedCity} />
+          <CityDetails
+            addCityToList={handleAddCityToList}
+            setSelectedCity={setSelectedCity}
+            weatherData={selectedCity}
+          />
           <CityNotes cityName={selectedCity.name} />
         </Fragment>
       ) : (

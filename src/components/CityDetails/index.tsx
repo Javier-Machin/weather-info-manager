@@ -6,12 +6,13 @@ import CityDetailsEntry from './CityDetailsEntry';
 interface CityDetailsProps {
   weatherData?: FormattedWeatherData;
   setSelectedCity: React.Dispatch<FormattedWeatherData | null>;
+  addCityToList: (city: FormattedWeatherData) => void;
 }
 
 // Add option to add city to list, search reroutes to this page
 
 const CityDetails: React.FC<CityDetailsProps> = (props) => {
-  const { weatherData, setSelectedCity } = props;
+  const { weatherData, setSelectedCity, addCityToList } = props;
   if (!weatherData) return null;
 
   const {
@@ -29,9 +30,15 @@ const CityDetails: React.FC<CityDetailsProps> = (props) => {
     setSelectedCity(null);
   };
 
+  const handleAddCityToList = () => {
+    addCityToList(weatherData);
+    handleDeselectCity();
+  };
+
   return (
     <section className="city-details">
       <button onClick={handleDeselectCity}>Go back to list</button>
+      <button onClick={handleAddCityToList}>Add city to list</button>
       <CityDetailsEntry label="" value={name} />
       <CityDetailsEntry label="Clouds cover: " value={`${clouds}%`} />
       <CityDetailsEntry label="Temperature: " value={`${temp}ºC`} />
