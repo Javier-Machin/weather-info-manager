@@ -23,6 +23,7 @@ const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
 
   const handleRequestListWeather = useCallback(async () => {
+    setErrorMessage(null);
     const localAvailable = localStorageAvailable();
 
     if (localAvailable) {
@@ -41,6 +42,7 @@ const App: React.FC = () => {
         } else {
           // If the local data can't be updated, load the last known data
           setWeatherData(localWeatherData);
+          setErrorMessage(serviceResponse);
         }
         return;
       }
@@ -63,6 +65,7 @@ const App: React.FC = () => {
   }, []);
 
   const handleUserLocationWeather = async () => {
+    setErrorMessage(null);
     const locationResponse = await getUserCoordinates();
     let serviceResponse;
 
@@ -109,8 +112,9 @@ const App: React.FC = () => {
   if (errorMessage) {
     console.log(errorMessage);
   }
-
-  // TODO Implement list favorites
+  const handleClearErrors = () => {
+    setErrorMessage(null);
+  };
 
   // TODO Implement render errors
 
@@ -126,6 +130,7 @@ const App: React.FC = () => {
 
   return (
     <main className="App">
+      {!!errorMessage && <p className="error-message">{errorMessage.error}</p>}
       <h3 className="main-title">Weather Info Manager</h3>
       <CitySearch setSelectedCity={setSelectedCity} setErrorMessage={setErrorMessage} />
       <button onClick={handleUserLocationWeather}>Check weather for my location</button>
