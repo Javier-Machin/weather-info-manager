@@ -21,10 +21,26 @@ const CityRow: React.FC<CityRowProps> = (props) => {
 
   return (
     <div className={rowClasses} id={name}>
-      <Button onClick={onClick!.bind(null, name)} text={name} btnType="button" />
+      <i className="fas fa-city" />
+      <Button
+        onClick={onClick!.bind(null, name)}
+        text={name}
+        btnType="button"
+        btnClasses="city-name"
+      />
       <span>{`${temp} ºC`}</span>
-      <Button onClick={deleteCityFromList.bind(null, name)} text="Remove" btnType="button" />
-      <Button onClick={toggleCityFavorite.bind(null, name)} text="Fav" btnType="button" />
+      <Button
+        onClick={toggleCityFavorite.bind(null, name)}
+        text={<i className="far fa-star" />}
+        btnType="button"
+        btnClasses="button-star"
+      />
+      <Button
+        onClick={deleteCityFromList.bind(null, name)}
+        text={<i className="far fa-trash-alt" />}
+        btnType="button"
+        btnClasses="button-trash"
+      />
     </div>
   );
 };

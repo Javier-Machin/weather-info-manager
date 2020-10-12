@@ -1,0 +1,17 @@
+.city-search {
+  display: flex;
+  align-items: center;
+
+  .search-input {
+    font-size: 3rem;
+    border: 2px solid darkcyan;
+    border-radius: 5px;
+  }
+
+  .button-search {
+    border: 2px solid darkcyan;
+    font-size: 2rem;
+    background-color: darkcyan;
+    color: white;
+  }
+}

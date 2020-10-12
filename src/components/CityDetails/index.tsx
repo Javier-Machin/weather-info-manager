@@ -10,8 +10,6 @@ interface CityDetailsProps {
   addCityToList: (city: FormattedWeatherData) => void;
 }
 
-// Add option to add city to list, search reroutes to this page
-
 const CityDetails: React.FC<CityDetailsProps> = (props) => {
   const { weatherData, setSelectedCity, addCityToList, cityPresentInList } = props;
   if (!weatherData) return null;

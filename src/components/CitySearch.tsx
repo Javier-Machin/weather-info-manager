@@ -35,14 +35,19 @@ const CitySearch: React.FC<CitySearchProps> = (props) => {
   };
 
   return (
-    <form>
+    <form className="city-search">
       <input
-        className="text-area"
+        className="search-input"
         value={value}
         placeholder={placeholder}
         onChange={handleOnChange}
       />
-      <Button onClick={handleSubmitSearch} btnType="submit" text="Search" />
+      <Button
+        onClick={handleSubmitSearch}
+        btnType="submit"
+        text="Search"
+        btnClasses="button-search"
+      />
     </form>
   );
 };

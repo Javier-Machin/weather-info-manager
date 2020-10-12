@@ -118,9 +118,7 @@ const App: React.FC = () => {
     setErrorMessage(null);
   };
 
-  // TODO Extract button as component
-
-  // TODO Improve design, city icon, delete icon, star icon, location icon
+  // TODO Improve design
 
   // TODO Add correct token
 
@@ -137,8 +135,9 @@ const App: React.FC = () => {
       <CitySearch setSelectedCity={setSelectedCity} setErrorMessage={setErrorMessage} />
       <Button
         onClick={handleUserLocationWeather}
-        text="Check weather for my location"
+        text="Check local weather"
         btnType="button"
+        btnClasses="button-user-location"
       />
       {selectedCity ? (
         <Fragment>

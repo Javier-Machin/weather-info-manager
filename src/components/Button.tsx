@@ -5,7 +5,7 @@ interface ButtonProps {
   onClick: (event?: any) => any;
   btnType: 'submit' | 'button';
   btnClasses?: string;
-  text: string;
+  text: any;
 }
 
 const Button: React.FC<ButtonProps> = ({ onClick, btnType, btnClasses, text }) => {

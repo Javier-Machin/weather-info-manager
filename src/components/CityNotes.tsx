@@ -11,11 +11,10 @@ interface CityNotesProps {
 }
 
 const CityNotes: React.FC<CityNotesProps> = (props) => {
+  const { cityName } = props;
   const [notes, setNotes] = useState<{ id: string; value: string; location: string }[] | null>(
     getNotesFromLocal()
   );
-  const { cityName } = props;
-
   let notesToRender: { id: string; value: string; location: string }[] = [];
 
   const handleAddNote = () => {
