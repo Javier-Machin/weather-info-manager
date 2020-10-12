@@ -34,11 +34,29 @@ const CityDetails: React.FC<CityDetailsProps> = (props) => {
     handleDeselectCity();
   };
 
+  const backButtonContent = (
+    <div>
+      <i className="fas fa-arrow-circle-left">
+        <span>Go back to list</span>
+      </i>
+    </div>
+  );
+
   return (
     <section className="city-details">
-      <Button onClick={handleDeselectCity} text="Go back to list" btnType="button" />
+      <Button
+        onClick={handleDeselectCity}
+        text={backButtonContent}
+        btnType="button"
+        btnClasses="button-back"
+      />
       {!cityPresentInList(name) && (
-        <Button onClick={handleAddCityToList} text="Add city to list" btnType="button" />
+        <Button
+          onClick={handleAddCityToList}
+          text="Add city to list"
+          btnType="button"
+          btnClasses="button-add-city-to-list"
+        />
       )}
       <CityDetailsEntry label="" value={name} />
       <CityDetailsEntry label="Clouds cover: " value={`${clouds}%`} />

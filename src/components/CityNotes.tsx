@@ -24,8 +24,8 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
       saveDataToLocal('notes', [newNote]);
       setNotes([newNote]);
     } else {
-      saveDataToLocal('notes', [...notes, newNote]);
-      setNotes([...notes, newNote]);
+      saveDataToLocal('notes', [newNote, ...notes]);
+      setNotes([newNote, ...notes]);
     }
   };
 
@@ -43,11 +43,24 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
 
   if (notes) notesToRender = notes.filter((note) => note.location === cityName);
 
+  const addNoteBtnContent = (
+    <div>
+      <i className="fas fa-plus-circle">
+        <span>Add note</span>
+      </i>
+    </div>
+  );
+
   return (
     <section className="city-notes">
-      <Button onClick={handleAddNote} btnType="button" text="Add new note" />
+      <Button
+        onClick={handleAddNote}
+        btnType="button"
+        text={addNoteBtnContent}
+        btnClasses="button-add-note"
+      />
       {notesToRender.map((note: { id: string; value: string; location: string }) => (
-        <Fragment>
+        <Fragment key={uuidv4()}>
           <TextArea
             id={note.id}
             key={uuidv4()}
@@ -57,7 +70,8 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
           <Button
             onClick={handleDeleteNote.bind(null, note.id)}
             btnType="button"
-            text="Delete note"
+            text={<i className="far fa-trash-alt" />}
+            btnClasses="button-delete-note"
           />
         </Fragment>
       ))}

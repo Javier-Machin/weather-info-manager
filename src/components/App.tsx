@@ -111,9 +111,6 @@ const App: React.FC = () => {
     return !!weatherData.find((city) => city.name === name);
   };
 
-  if (errorMessage) {
-    console.log(errorMessage);
-  }
   const handleClearErrors = () => {
     setErrorMessage(null);
   };

@@ -1,4 +1,33 @@
 .city-notes {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  .button-delete-note {
+    border: none;
+    background-color: rgb(250, 250, 250);
+  }
+
+  .button-add-note {
+    margin: 4rem 0 2rem 0;
+    padding: 1rem 0;
+    border: none;
+    background-color: darkcyan;
+    width: 250px;
+  }
+
+  .fa-trash-alt:before {
+    color: red;
+    font-size: 2.5rem;
+  }
+
+  .fa-plus-circle {
+    color: white;
+    span {
+      padding: 1rem;
+      font-family: sans-serif;
+    }
+  }
 }
