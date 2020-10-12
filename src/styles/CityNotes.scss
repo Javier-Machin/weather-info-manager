@@ -8,26 +8,22 @@
   .button-delete-note {
     border: none;
     background-color: rgb(250, 250, 250);
+    color: red;
   }
 
   .button-add-note {
+    display: flex;
+    justify-content: center;
     margin: 4rem 0 2rem 0;
     padding: 1rem 0;
     border: none;
     background-color: darkcyan;
-    width: 250px;
-  }
+    width: 200px;
 
-  .fa-trash-alt:before {
-    color: red;
-    font-size: 2.5rem;
-  }
-
-  .fa-plus-circle {
-    color: white;
+    svg,
     span {
-      padding: 1rem;
-      font-family: sans-serif;
+      padding: 0 0.5rem;
+      color: white;
     }
   }
 }

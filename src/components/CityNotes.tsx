@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import debounce from 'lodash/debounce';
+import { FaTrashAlt, FaPlusCircle } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 import { getNotesFromLocal, saveDataToLocal } from '../util';
 import TextArea from './TextArea';
@@ -44,11 +45,10 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
   if (notes) notesToRender = notes.filter((note) => note.location === cityName);
 
   const addNoteBtnContent = (
-    <div>
-      <i className="fas fa-plus-circle">
-        <span>Add note</span>
-      </i>
-    </div>
+    <Fragment>
+      <FaPlusCircle />
+      <span>Add note</span>
+    </Fragment>
   );
 
   return (
@@ -70,7 +70,7 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
           <Button
             onClick={handleDeleteNote.bind(null, note.id)}
             btnType="button"
-            text={<i className="far fa-trash-alt" />}
+            text={<FaTrashAlt />}
             btnClasses="button-delete-note"
           />
         </Fragment>

@@ -12,12 +12,23 @@
     border: none;
   }
 
-  .fa-trash-alt:before {
-    color: red;
+  .button-star {
+    svg {
+      color: black;
+    }
   }
 
-  .fa-city:before {
+  .button-trash {
+    svg {
+      font-size: 2rem;
+      color: red;
+      font-weight: 300;
+    }
+  }
+
+  svg {
     color: darkcyan;
+    font-size: 2.5rem;
   }
 
   .city-name {
@@ -31,7 +42,9 @@
   border: 2px solid orange;
 
   .button-star {
-    color: orange;
+    svg {
+      color: orange;
+    }
   }
 
   .city-name {

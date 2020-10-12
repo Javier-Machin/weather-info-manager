@@ -115,14 +115,6 @@ const App: React.FC = () => {
     setErrorMessage(null);
   };
 
-  // TODO Improve design
-
-  // TODO Add correct token
-
-  // TODO Add tests
-
-  // TODO Push to heroku
-
   return (
     <main className="App">
       {!!errorMessage && (

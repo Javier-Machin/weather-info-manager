@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { FaArrowCircleLeft } from 'react-icons/fa';
 import { FormattedWeatherData } from '../../models';
 import '../../styles/CityDetails/CityDetails.scss';
 import CityDetailsEntry from './CityDetailsEntry';
@@ -35,11 +36,10 @@ const CityDetails: React.FC<CityDetailsProps> = (props) => {
   };
 
   const backButtonContent = (
-    <div>
-      <i className="fas fa-arrow-circle-left">
-        <span>Go back to list</span>
-      </i>
-    </div>
+    <Fragment>
+      <FaArrowCircleLeft />
+      <span>Go back to list</span>
+    </Fragment>
   );
 
   return (

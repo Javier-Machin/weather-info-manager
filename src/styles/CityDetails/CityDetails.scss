@@ -5,26 +5,26 @@
   align-items: center;
 
   .button-back {
+    display: flex;
+    align-items: center;
     border: none;
     background-color: rgb(250, 250, 250);
     margin-top: 2rem;
+
+    svg {
+      color: green;
+    }
+
+    span {
+      padding: 1rem;
+      font-weight: 600;
+    }
   }
 
   .button-add-city-to-list {
     border: 2px solid darkcyan;
     color: green;
     font-weight: 600;
-    padding: 1rem;
-  }
-}
-
-.fa-arrow-circle-left::before {
-  color: green;
-}
-
-.fa-arrow-circle-left {
-  span {
-    font-family: sans-serif;
     padding: 1rem;
   }
 }

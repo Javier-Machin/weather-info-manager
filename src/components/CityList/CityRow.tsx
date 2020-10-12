@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaCity, FaStar, FaTrashAlt } from 'react-icons/fa';
 import classnames from 'classnames';
 import Button from '../Button';
 import '../../styles/CityList/CityRow.scss';
@@ -21,7 +22,7 @@ const CityRow: React.FC<CityRowProps> = (props) => {
 
   return (
     <div className={rowClasses} id={name}>
-      <i className="fas fa-city" />
+      <FaCity />
       <Button
         onClick={onClick!.bind(null, name)}
         text={name}
@@ -31,13 +32,13 @@ const CityRow: React.FC<CityRowProps> = (props) => {
       <span>{`${temp} ºC`}</span>
       <Button
         onClick={toggleCityFavorite.bind(null, name)}
-        text={<i className="far fa-star" />}
+        text={<FaStar />}
         btnType="button"
         btnClasses="button-star"
       />
       <Button
         onClick={deleteCityFromList.bind(null, name)}
-        text={<i className="far fa-trash-alt" />}
+        text={<FaTrashAlt />}
         btnType="button"
         btnClasses="button-trash"
       />
