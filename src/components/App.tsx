@@ -17,9 +17,9 @@ import '../styles/App.scss';
 import { FormattedWeatherData, ErrorMessage } from '../models';
 
 const App: React.FC = () => {
-  const [selectedCity, setSelectedCity] = useState<FormattedWeatherData | null>(null);
   const [weatherData, setWeatherData] = useState<FormattedWeatherData[]>([]);
-  const [serviceError, setServiceError] = useState<ErrorMessage | null>(null);
+  const [selectedCity, setSelectedCity] = useState<FormattedWeatherData | null>(null);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
 
   const handleRequestListWeather = useCallback(async () => {
     const listCitiesIds = Object.values(listCitiesIdMap);
@@ -37,8 +37,8 @@ const App: React.FC = () => {
         return;
       }
     }
-
-    setServiceError(serviceResponse);
+    // If we reach this we have a service error
+    setErrorMessage(serviceResponse);
   }, []);
 
   useEffect(() => {
@@ -46,25 +46,33 @@ const App: React.FC = () => {
   }, [handleRequestListWeather]);
 
   const handleUserLocationWeather = async () => {
-    const locationResponse = await getUserCoordinates();
+    let serviceResponse;
+    const locationResponse: any = await getUserCoordinates();
 
-    if (typeof locationResponse !== 'string') {
-      const userLocationWeather = await requestWeatherByCoords(locationResponse);
-      if (Array.isArray(userLocationWeather)) {
-        const formattedData = formatWeatherData(userLocationWeather);
+    if (Array.isArray(locationResponse)) {
+      serviceResponse = await requestWeatherByCoords(locationResponse[0]);
+      if (Array.isArray(serviceResponse)) {
+        const formattedData = formatWeatherData(serviceResponse);
         setSelectedCity(formattedData[0]);
+        return;
       }
     }
+    // If we reach this we either have a service error or a location error
+    serviceResponse ? setErrorMessage(serviceResponse) : setErrorMessage(locationResponse);
   };
 
-  if (serviceError) {
-    console.log(serviceError);
+  if (errorMessage) {
+    console.log(errorMessage);
   }
-  // TODO Implement ask user location, fetch weather and set as selected
-
   // TODO Implement notes logic
 
   // TODO Implement search
+
+  // TODO Implement add from details to list
+
+  // TODO Implement remove from list
+
+  // TODO Implement list favorites
 
   // TODO Implement render errors
 
