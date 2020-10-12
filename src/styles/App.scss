@@ -9,6 +9,10 @@
 html {
   // This defines what 1rem is
   font-size: 62.5%; // 10px wanted, 16px default size so 62.5%
+
+  @media only screen and (max-width: 420px) {
+    font-size: 50%;
+  }
 }
 
 .App {
@@ -16,6 +20,7 @@ html {
   align-items: center;
   flex-direction: column;
   max-width: 580px;
+  min-width: 320px;
   height: 780px;
   margin: 4rem auto;
   border: 5px solid darkcyan;
@@ -27,6 +32,10 @@ html {
   font-size: 2rem;
   font-family: sans-serif;
   letter-spacing: 1px;
+
+  @media only screen and (max-width: 420px) {
+    margin: 0;
+  }
 
   .main-title {
     font-size: 2rem;

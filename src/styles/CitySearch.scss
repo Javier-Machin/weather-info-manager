@@ -1,6 +1,9 @@
 .city-search {
   display: flex;
   align-items: center;
+  @media only screen and (max-width: 420px) {
+    flex-direction: column;
+  }
 
   .search-input {
     padding: 0.5rem;

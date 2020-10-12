@@ -7,6 +7,10 @@
   border-radius: 10px;
   margin: 1rem;
 
+  @media only screen and (max-width: 420px) {
+    padding: 1rem;
+  }
+
   .button-star,
   .button-trash {
     border: none;
@@ -34,6 +38,10 @@
   .city-name {
     width: 240px;
     border: 2px solid darkcyan;
+  }
+
+  &-temp {
+    white-space: nowrap;
   }
 }
 

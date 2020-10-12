@@ -29,7 +29,7 @@ const CityRow: React.FC<CityRowProps> = (props) => {
         btnType="button"
         btnClasses="city-name"
       />
-      <span>{`${temp} ºC`}</span>
+      <span className="city-row-temp">{`${temp} ºC`}</span>
       <Button
         onClick={toggleCityFavorite.bind(null, name)}
         text={<FaStar />}
