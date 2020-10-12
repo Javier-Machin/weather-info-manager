@@ -15,6 +15,7 @@ import '../styles/App.scss';
 
 // Interfaces
 import { FormattedWeatherData, ErrorMessage } from '../models';
+import CitySearch from './CitySearch';
 
 const App: React.FC = () => {
   const [weatherData, setWeatherData] = useState<FormattedWeatherData[]>([]);
@@ -64,8 +65,6 @@ const App: React.FC = () => {
   if (errorMessage) {
     console.log(errorMessage);
   }
-  // TODO Implement notes logic
-
   // TODO Implement search
 
   // TODO Implement add from details to list
@@ -89,6 +88,7 @@ const App: React.FC = () => {
   return (
     <main className="App">
       <h3 className="main-title">Weather Info Manager</h3>
+      <CitySearch setSelectedCity={setSelectedCity} setErrorMessage={setErrorMessage} />
       <button onClick={handleUserLocationWeather}>Check weather for my location</button>
       {selectedCity ? (
         <Fragment>
