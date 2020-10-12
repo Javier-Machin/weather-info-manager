@@ -5,6 +5,7 @@ import { WeatherDataResponse, FormattedWeatherData } from '../models';
 const formatWeatherData = (weatherData: WeatherDataResponse[]) => {
   return weatherData.map((data) => {
     return {
+      cityId: data.id,
       name: data.name,
       temp: Math.round(data.main.temp),
       tempFeeling: Math.round(data.main.feels_like),

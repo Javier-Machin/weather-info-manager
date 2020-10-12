@@ -13,9 +13,11 @@ export interface WeatherDataResponse {
     speed: number;
   };
   weather: [{ description: string }];
+  id: number;
 }
 
 export interface FormattedWeatherData {
+  cityId: number;
   name: string;
   temp: number;
   tempFeeling: number;

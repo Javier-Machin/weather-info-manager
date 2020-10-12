@@ -23,21 +23,41 @@ const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
 
   const handleRequestListWeather = useCallback(async () => {
-    const listCitiesIds = Object.values(listCitiesIdMap);
-    const serviceResponse = await requestListWeatherData(listCitiesIds);
+    const localAvailable = localStorageAvailable();
+
+    if (localAvailable) {
+      const localWeatherData = getWeatherFromLocal();
+
+      // If we have a list of cities in local storage, update their weather data
+
+      if (localWeatherData) {
+        const localCitiesIds = localWeatherData.map((city) => city.cityId);
+        const serviceResponse = await requestListWeatherData(localCitiesIds);
+
+        if (Array.isArray(serviceResponse)) {
+          const formattedData = formatWeatherData(serviceResponse);
+          saveDataToLocal('weatherData', formattedData);
+          setWeatherData(formattedData);
+          return;
+        } else {
+          // If the local data can't be updated, load the last known data
+          setWeatherData(localWeatherData);
+        }
+      }
+    }
+
+    // If we don't have cities in local, fetch the top 15 by population and save them
+
+    const top15CitiesIds = Object.values(listCitiesIdMap);
+    const serviceResponse = await requestListWeatherData(top15CitiesIds);
 
     if (Array.isArray(serviceResponse)) {
       const formattedData = formatWeatherData(serviceResponse);
-      saveDataToLocal('weatherData', formattedData);
+      if (localAvailable) saveDataToLocal('weatherData', formattedData);
       setWeatherData(formattedData);
       return;
-    } else if (localStorageAvailable()) {
-      const localWeatherData = getWeatherFromLocal();
-      if (localWeatherData) {
-        setWeatherData(localWeatherData);
-        return;
-      }
     }
+
     // If we reach this we have a service error
     setErrorMessage(serviceResponse);
   }, []);
@@ -82,15 +102,13 @@ const App: React.FC = () => {
     console.log(errorMessage);
   }
 
-  // TODO Implement remove from list
-
   // TODO Implement list favorites
 
   // TODO Implement render errors
 
   // TODO Extract button as component
 
-  // TODO Improve design
+  // TODO Improve design, city icon, delete icon, star icon, location icon
 
   // TODO Add correct token
 
