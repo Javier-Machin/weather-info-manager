@@ -1,4 +1,4 @@
-import { WeatherDataResponse, FormattedWeatherData } from '../models';
+import { WeatherDataResponse, FormattedWeatherData, CoordinatesObj } from '../models';
 
 // Remove not needed keys and improve format
 
@@ -65,10 +65,31 @@ const getDataFromLocal = () => {
   return data ? (JSON.parse(data) as FormattedWeatherData[]) : null;
 };
 
+const getUserCoordinates = () => {
+  return new Promise<CoordinatesObj | string>((resolve, _) => {
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    const success: PositionCallback = (pos: Position) => {
+      resolve(pos.coords);
+    };
+
+    const error = (err: { code: number; message: string }) => {
+      resolve(`ERROR(${err.code}): ${err.message}`);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+  });
+};
+
 export {
   listCitiesIdMap,
   formatWeatherData,
   localStorageAvailable,
   saveDataToLocal,
   getDataFromLocal,
+  getUserCoordinates,
 };

@@ -30,3 +30,8 @@ export interface FormattedWeatherData {
 export interface ErrorMessage {
   error: string;
 }
+
+export interface CoordinatesObj {
+  latitude: number;
+  longitude: number;
+}

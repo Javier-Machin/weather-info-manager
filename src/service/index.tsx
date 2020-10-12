@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { WeatherDataResponse, ErrorMessage } from '../models';
+import { WeatherDataResponse, ErrorMessage, CoordinatesObj } from '../models';
 
 const SERVICE_URL = 'https://api.openweathermap.org/data/2.5/';
 
@@ -29,6 +29,20 @@ const requestListWeatherData = async (locationIds: number[]) => {
   }
 };
 
+const requestWeatherByCoords = async (coordinates: CoordinatesObj) => {
+  const { latitude, longitude } = coordinates;
+
+  try {
+    const response = await Axios.get(
+      `${SERVICE_URL}weather?lat=${latitude}&lon=${longitude}&units=metric&APPID=${process.env.REACT_APP_WEATHER_API_ID}`
+    );
+
+    return [response.data] as WeatherDataResponse[];
+  } catch (error) {
+    return handleRequestError(error);
+  }
+};
+
 function handleRequestError(error: Error): ErrorMessage {
   if (error.message.includes('404')) {
     return {
@@ -41,4 +55,4 @@ function handleRequestError(error: Error): ErrorMessage {
   }
 }
 
-export { requestWeatherData, requestListWeatherData };
+export { requestWeatherData, requestListWeatherData, requestWeatherByCoords };

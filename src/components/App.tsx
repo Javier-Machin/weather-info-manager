@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import CityList from './CityList';
 import CityNotes from './CityNotes';
 import CityDetails from './CityDetails';
-import { requestListWeatherData } from '../service';
+import { requestListWeatherData, requestWeatherByCoords } from '../service';
 import {
   formatWeatherData,
   getDataFromLocal,
+  getUserCoordinates,
   listCitiesIdMap,
   localStorageAvailable,
   saveDataToLocal,
@@ -44,14 +45,43 @@ const App: React.FC = () => {
     handleRequestListWeather();
   }, [handleRequestListWeather]);
 
+  const handleUserLocationWeather = async () => {
+    const locationResponse = await getUserCoordinates();
+
+    if (typeof locationResponse !== 'string') {
+      const userLocationWeather = await requestWeatherByCoords(locationResponse);
+      if (Array.isArray(userLocationWeather)) {
+        const formattedData = formatWeatherData(userLocationWeather);
+        setSelectedCity(formattedData[0]);
+      }
+    }
+  };
+
   if (serviceError) {
     console.log(serviceError);
   }
+  // TODO Implement ask user location, fetch weather and set as selected
+
+  // TODO Implement notes logic
+
+  // TODO Implement search
+
+  // TODO Implement render errors
+
+  // TODO Extract button as component
+
+  // TODO Improve design
+
+  // TODO Add correct token
+
+  // TODO Add tests
+
+  // TODO Push to heroku
 
   return (
     <main className="App">
       <h3 className="main-title">Weather Info Manager</h3>
-      <button>Check weather for my location</button>
+      <button onClick={handleUserLocationWeather}>Check weather for my location</button>
       {selectedCity ? (
         <Fragment>
           <CityDetails setSelectedCity={setSelectedCity} weatherData={selectedCity} />

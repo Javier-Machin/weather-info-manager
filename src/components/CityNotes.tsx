@@ -10,13 +10,13 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
   const { cityName } = props;
   if (!cityName) return null;
 
-  // get notes here and map through them in render
+  // TODO get notes here and map through them in render
 
-  // handler to update notes debounced, id and value
+  // TODO handler to add new note, notes need unique id
 
-  // handler to add new note, notes need unique id
+  // TODO handler to update notes debounced, id and value
 
-  // handler to remove a note, id
+  // TODO handler to remove a note, id
 
   return (
     <section className="city-notes">
