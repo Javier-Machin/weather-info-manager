@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import Button from '../Button';
 import '../../styles/CityList/CityRow.scss';
 
 interface CityRowProps {
@@ -20,16 +21,10 @@ const CityRow: React.FC<CityRowProps> = (props) => {
 
   return (
     <div className={rowClasses} id={name}>
-      <button onClick={onClick!.bind(null, name)} type="button">
-        {name}
-      </button>
+      <Button onClick={onClick!.bind(null, name)} text={name} btnType="button" />
       <span>{`${temp} ºC`}</span>
-      <button type="button" onClick={toggleCityFavorite.bind(null, name)}>
-        Fav
-      </button>
-      <button type="button" onClick={deleteCityFromList.bind(null, name)}>
-        Remove
-      </button>
+      <Button onClick={deleteCityFromList.bind(null, name)} text="Remove" btnType="button" />
+      <Button onClick={toggleCityFavorite.bind(null, name)} text="Fav" btnType="button" />
     </div>
   );
 };

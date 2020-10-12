@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getNotesFromLocal, saveDataToLocal } from '../util';
 import TextArea from './TextArea';
 import '../styles/CityNotes.scss';
+import Button from './Button';
 
 interface CityNotesProps {
   cityName: string;
@@ -45,9 +46,7 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
 
   return (
     <section className="city-notes">
-      <button onClick={handleAddNote} type="button">
-        Add new note
-      </button>
+      <Button onClick={handleAddNote} btnType="button" text="Add new note" />
       {notesToRender.map((note: { id: string; value: string; location: string }) => (
         <Fragment>
           <TextArea
@@ -56,9 +55,11 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
             initialValue={note.value}
             handleUpdateLocalNotes={handleUpdateLocalNotes}
           />
-          <button onClick={handleDeleteNote.bind(null, note.id)} type="button">
-            Delete note
-          </button>
+          <Button
+            onClick={handleDeleteNote.bind(null, note.id)}
+            btnType="button"
+            text="Delete note"
+          />
         </Fragment>
       ))}
     </section>

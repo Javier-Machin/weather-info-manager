@@ -3,6 +3,7 @@ import { ErrorMessage, FormattedWeatherData } from '../models';
 import { requestWeatherData } from '../service';
 import { formatWeatherData } from '../util';
 import '../styles/CitySearch.scss';
+import Button from './Button';
 
 interface CitySearchProps {
   placeholder?: string;
@@ -41,9 +42,7 @@ const CitySearch: React.FC<CitySearchProps> = (props) => {
         placeholder={placeholder}
         onChange={handleOnChange}
       />
-      <button onClick={handleSubmitSearch} type="submit">
-        Search
-      </button>
+      <Button onClick={handleSubmitSearch} btnType="submit" text="Search" />
     </form>
   );
 };

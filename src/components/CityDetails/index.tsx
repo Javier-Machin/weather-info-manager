@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedWeatherData } from '../../models';
 import '../../styles/CityDetails/CityDetails.scss';
 import CityDetailsEntry from './CityDetailsEntry';
-
+import Button from '../Button';
 interface CityDetailsProps {
   weatherData?: FormattedWeatherData;
   setSelectedCity: React.Dispatch<FormattedWeatherData | null>;
@@ -38,9 +38,9 @@ const CityDetails: React.FC<CityDetailsProps> = (props) => {
 
   return (
     <section className="city-details">
-      <button onClick={handleDeselectCity}>Go back to list</button>
+      <Button onClick={handleDeselectCity} text="Go back to list" btnType="button" />
       {!cityPresentInList(name) && (
-        <button onClick={handleAddCityToList}>Add city to list</button>
+        <Button onClick={handleAddCityToList} text="Add city to list" btnType="button" />
       )}
       <CityDetailsEntry label="" value={name} />
       <CityDetailsEntry label="Clouds cover: " value={`${clouds}%`} />

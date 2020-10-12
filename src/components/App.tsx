@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import CityList from './CityList';
 import CityNotes from './CityNotes';
 import CityDetails from './CityDetails';
+import ErrorMessageBanner from './ErrorMessageBanner';
 import { requestListWeatherData, requestWeatherByCoords } from '../service';
 import {
   formatWeatherData,
@@ -16,6 +17,7 @@ import '../styles/App.scss';
 // Interfaces
 import { FormattedWeatherData, ErrorMessage } from '../models';
 import CitySearch from './CitySearch';
+import Button from './Button';
 
 const App: React.FC = () => {
   const [weatherData, setWeatherData] = useState<FormattedWeatherData[]>([]);
@@ -116,8 +118,6 @@ const App: React.FC = () => {
     setErrorMessage(null);
   };
 
-  // TODO Implement render errors
-
   // TODO Extract button as component
 
   // TODO Improve design, city icon, delete icon, star icon, location icon
@@ -130,10 +130,16 @@ const App: React.FC = () => {
 
   return (
     <main className="App">
-      {!!errorMessage && <p className="error-message">{errorMessage.error}</p>}
+      {!!errorMessage && (
+        <ErrorMessageBanner errorMessage={errorMessage} clearErrors={handleClearErrors} />
+      )}
       <h3 className="main-title">Weather Info Manager</h3>
       <CitySearch setSelectedCity={setSelectedCity} setErrorMessage={setErrorMessage} />
-      <button onClick={handleUserLocationWeather}>Check weather for my location</button>
+      <Button
+        onClick={handleUserLocationWeather}
+        text="Check weather for my location"
+        btnType="button"
+      />
       {selectedCity ? (
         <Fragment>
           <CityDetails
