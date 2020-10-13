@@ -34,10 +34,10 @@ It will generate a coverage report in the coverage folder, open the index.html f
 ![App home page](./images/weather-app-1.png)
 
 ## Details view
-![App home page](./images/weather-app-2.png)
+![App details view](./images/weather-app-2.png)
 
-## Search results
-![App home page](./images/weather-app-3.png)
+## Search result
+![App search result](./images/weather-app-3.png)
 
 ## Notes
-![App home page](./images/weather-app-4.png)
+![App notes](./images/weather-app-4.png)
