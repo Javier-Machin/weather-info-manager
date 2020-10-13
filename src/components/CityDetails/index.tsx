@@ -7,12 +7,12 @@ import Button from '../Button';
 interface CityDetailsProps {
   weatherData?: FormattedWeatherData;
   setSelectedCity: React.Dispatch<FormattedWeatherData | null>;
-  cityPresentInList: (name: string) => boolean;
+  cityCanBeAddedToList: (name: string) => boolean;
   addCityToList: (city: FormattedWeatherData) => void;
 }
 
 const CityDetails: React.FC<CityDetailsProps> = (props) => {
-  const { weatherData, setSelectedCity, addCityToList, cityPresentInList } = props;
+  const { weatherData, setSelectedCity, addCityToList, cityCanBeAddedToList } = props;
   if (!weatherData) return null;
 
   const {
@@ -50,7 +50,7 @@ const CityDetails: React.FC<CityDetailsProps> = (props) => {
         btnType="button"
         btnClasses="button-back"
       />
-      {!cityPresentInList(name) && (
+      {cityCanBeAddedToList(name) && (
         <Button
           onClick={handleAddCityToList}
           text="Add city to list"

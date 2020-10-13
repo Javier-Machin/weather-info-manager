@@ -1,4 +1,4 @@
-import { WeatherDataResponse, FormattedWeatherData } from '../models';
+import { WeatherDataResponse, FormattedWeatherData, Note } from '../models';
 
 // Remove not needed keys and improve format
 
@@ -59,10 +59,7 @@ const localStorageAvailable = () => {
   }
 };
 
-const saveDataToLocal = (
-  key: string,
-  data: FormattedWeatherData[] | { id: string; value: string; location: string }[]
-) => {
+const saveDataToLocal = (key: string, data: FormattedWeatherData[] | Note[]) => {
   localStorage.setItem(key, JSON.stringify(data));
 };
 
@@ -73,7 +70,7 @@ const getWeatherFromLocal = () => {
 
 const getNotesFromLocal = () => {
   let data = localStorage.getItem('notes');
-  return data ? (JSON.parse(data) as { id: string; value: string; location: string }[]) : null;
+  return data ? (JSON.parse(data) as Note[]) : null;
 };
 
 const setFavoritesFromLocal = (data: FormattedWeatherData[]) => {

@@ -1,6 +1,12 @@
 .city-details-entry {
   margin-top: 1rem;
   display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  &-value {
+    font-weight: bolder;
+  }
 }
 
 .city-details-entry:first-of-type {

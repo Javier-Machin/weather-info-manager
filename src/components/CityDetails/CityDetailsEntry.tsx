@@ -11,8 +11,8 @@ const CityDetailsEntry: React.FC<CityDetailsEntryProps> = (props) => {
 
   return (
     <div className="city-details-entry">
-      <span>{label}</span>
-      <span>{value}</span>
+      {!!label && <span className="city-details-entry-label">{label}</span>}
+      <span className="city-details-entry-value">{value}</span>
     </div>
   );
 };

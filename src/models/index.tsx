@@ -29,6 +29,12 @@ export interface FormattedWeatherData {
   favorite: boolean;
 }
 
+export interface Note {
+  id: string;
+  value: string;
+  location: string;
+}
+
 export interface ErrorMessage {
   error: string;
 }

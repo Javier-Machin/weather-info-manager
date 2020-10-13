@@ -24,6 +24,8 @@ const CitySearch: React.FC<CitySearchProps> = (props) => {
   const handleSubmitSearch = async (event: React.FormEvent) => {
     event.preventDefault();
     setErrorMessage(null);
+
+    if (!value) return;
     const serviceResponse = await requestWeatherData(value);
 
     if (Array.isArray(serviceResponse)) {

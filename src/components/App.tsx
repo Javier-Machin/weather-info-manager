@@ -2,22 +2,22 @@ import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import CityList from './CityList';
 import CityNotes from './CityNotes';
 import CityDetails from './CityDetails';
+import CitySearch from './CitySearch';
 import ErrorMessageBanner from './ErrorMessageBanner';
+import Button from './Button';
 import { requestListWeatherData, requestWeatherByCoords } from '../service';
 import {
   formatWeatherData,
+  localAvailable,
   getWeatherFromLocal,
+  saveDataToLocal,
   getUserCoordinates,
   listCitiesIdMap,
-  saveDataToLocal,
-  localAvailable,
 } from '../util';
 import '../styles/App.scss';
 
 // Interfaces
 import { FormattedWeatherData, ErrorMessage } from '../models';
-import CitySearch from './CitySearch';
-import Button from './Button';
 
 const App: React.FC = () => {
   const [weatherData, setWeatherData] = useState<FormattedWeatherData[]>([]);
@@ -29,8 +29,10 @@ const App: React.FC = () => {
     if (localAvailable) {
       const localWeatherData = getWeatherFromLocal();
 
-      // If we have a list of cities in local storage, update their weather data
+      // The user manually deleted all cities from list
+      if (localWeatherData && !localWeatherData.length) return;
 
+      // If we have a list of cities in local storage, update their weather data
       if (localWeatherData) {
         const localCitiesIds = localWeatherData.map((city) => city.cityId);
         const serviceResponse = await requestListWeatherData(localCitiesIds);
@@ -49,7 +51,6 @@ const App: React.FC = () => {
     }
 
     // If we don't have cities in local, fetch the top 15 by population and save them
-
     const top15CitiesIds = Object.values(listCitiesIdMap);
     const serviceResponse = await requestListWeatherData(top15CitiesIds);
 
@@ -105,8 +106,8 @@ const App: React.FC = () => {
     handleRequestListWeather();
   }, [handleRequestListWeather]);
 
-  const cityPresentInList = (name: string) => {
-    return !!weatherData.find((city) => city.name === name);
+  const cityCanBeAddedToList = (name: string) => {
+    return !weatherData.find((city) => city.name === name) && weatherData.length < 20;
   };
 
   const handleClearErrors = () => {
@@ -130,7 +131,7 @@ const App: React.FC = () => {
         <Fragment>
           <CityDetails
             addCityToList={handleAddCityToList}
-            cityPresentInList={cityPresentInList}
+            cityCanBeAddedToList={cityCanBeAddedToList}
             setSelectedCity={setSelectedCity}
             weatherData={selectedCity}
           />

@@ -6,6 +6,7 @@ import { getNotesFromLocal, saveDataToLocal, localAvailable } from '../util';
 import TextArea from './TextArea';
 import '../styles/CityNotes.scss';
 import Button from './Button';
+import { Note } from '../models';
 
 interface CityNotesProps {
   cityName: string;
@@ -13,10 +14,8 @@ interface CityNotesProps {
 
 const CityNotes: React.FC<CityNotesProps> = (props) => {
   const { cityName } = props;
-  const [notes, setNotes] = useState<{ id: string; value: string; location: string }[] | null>(
-    getNotesFromLocal()
-  );
-  let notesToRender: { id: string; value: string; location: string }[] = [];
+  const [notes, setNotes] = useState<Note[] | null>(getNotesFromLocal());
+  let notesToRender: Note[] = [];
 
   const handleAddNote = () => {
     const newNote = { id: uuidv4(), value: '', location: cityName };
@@ -59,13 +58,14 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
         text={addNoteBtnContent}
         btnClasses="button-add-note"
       />
-      {notesToRender.map((note: { id: string; value: string; location: string }) => (
+      {notesToRender.map((note: Note) => (
         <Fragment key={uuidv4()}>
           <TextArea
             id={note.id}
             key={uuidv4()}
             initialValue={note.value}
             handleUpdateLocalNotes={handleUpdateLocalNotes}
+            placeholder="Enter your notes"
           />
           <Button
             onClick={handleDeleteNote.bind(null, note.id)}

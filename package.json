@@ -39,6 +39,13 @@
     "extends": "react-app"
   },
   "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/src/react-app-env.d.ts",
+      "!<rootDir>/src/serviceWorker.ts",
+      "!<rootDir>/src/index.tsx"
+    ],
     "coverageReporters": [
       "text",
       "html"
