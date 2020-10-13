@@ -28,7 +28,8 @@ To run the tests:
 
 It will generate a coverage report in the coverage folder, open the index.html file with your browser to check it.
 
-## Live version: https://weather-info-manager.herokuapp.com/
+## Important: First load might take longer than expected, hosted in heroku free tier
+# Live version: https://weather-info-manager.herokuapp.com/
 
 ## Home page
 ![App home page](./images/weather-app-1.png)
