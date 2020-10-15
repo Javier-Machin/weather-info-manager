@@ -1,4 +1,4 @@
-import { WeatherDataResponse, FormattedWeatherData, Note } from '../models';
+import { WeatherDataResponse, FormattedWeatherData, Note, LocalData } from '../models';
 
 // Remove not needed keys and improve format
 
@@ -63,18 +63,20 @@ const saveDataToLocal = (key: string, data: FormattedWeatherData[] | Note[]) => 
   localStorage.setItem(key, JSON.stringify(data));
 };
 
-const getWeatherFromLocal = () => {
-  let data = localStorage.getItem('weatherData');
-  return data ? (JSON.parse(data) as FormattedWeatherData[]) : null;
-};
-
-const getNotesFromLocal = () => {
-  let data = localStorage.getItem('notes');
-  return data ? (JSON.parse(data) as Note[]) : null;
-};
+function getDataFromLocal(key: 'notes'): Note[] | null;
+function getDataFromLocal(key: 'weatherData'): FormattedWeatherData[] | null;
+function getDataFromLocal(key: 'notes' | 'weatherData'): LocalData {
+  if (key === 'notes') {
+    const data = localStorage.getItem(key);
+    return data ? (JSON.parse(data) as Note[]) : null;
+  } else {
+    const data = localStorage.getItem(key);
+    return data ? (JSON.parse(data) as FormattedWeatherData[]) : null;
+  }
+}
 
 const setFavoritesFromLocal = (data: FormattedWeatherData[]) => {
-  const localWeatherData = getWeatherFromLocal();
+  const localWeatherData = getDataFromLocal('weatherData');
   let localCitiesFavorites: string[] = [];
 
   if (localWeatherData) {
@@ -118,7 +120,6 @@ export {
   localAvailable,
   formatWeatherData,
   saveDataToLocal,
-  getWeatherFromLocal,
-  getNotesFromLocal,
+  getDataFromLocal,
   getUserCoordinates,
 };

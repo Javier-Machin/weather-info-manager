@@ -43,3 +43,5 @@ export interface CoordinatesObj {
   latitude: number;
   longitude: number;
 }
+
+export type LocalData = Note[] | FormattedWeatherData[] | null;

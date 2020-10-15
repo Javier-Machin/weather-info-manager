@@ -9,10 +9,10 @@ import { requestListWeatherData, requestWeatherByCoords } from '../service';
 import {
   formatWeatherData,
   localAvailable,
-  getWeatherFromLocal,
   saveDataToLocal,
   getUserCoordinates,
   listCitiesIdMap,
+  getDataFromLocal,
 } from '../util';
 import '../styles/App.scss';
 
@@ -27,7 +27,7 @@ const App: React.FC = () => {
   const handleRequestListWeather = useCallback(async () => {
     setErrorMessage(null);
     if (localAvailable) {
-      const localWeatherData = getWeatherFromLocal();
+      const localWeatherData = getDataFromLocal('weatherData');
 
       // The user manually deleted all cities from list
       if (localWeatherData && !localWeatherData.length) return;

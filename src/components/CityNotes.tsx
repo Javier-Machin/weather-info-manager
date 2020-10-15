@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { FaTrashAlt, FaPlusCircle } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
-import { getNotesFromLocal, saveDataToLocal, localAvailable } from '../util';
+import { saveDataToLocal, localAvailable, getDataFromLocal } from '../util';
 import TextArea from './TextArea';
 import '../styles/CityNotes.scss';
 import Button from './Button';
@@ -14,7 +14,7 @@ interface CityNotesProps {
 
 const CityNotes: React.FC<CityNotesProps> = (props) => {
   const { cityName } = props;
-  const [notes, setNotes] = useState<Note[] | null>(getNotesFromLocal());
+  const [notes, setNotes] = useState<Note[] | null>(getDataFromLocal('notes'));
   let notesToRender: Note[] = [];
 
   const handleAddNote = () => {
