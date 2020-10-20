@@ -21,7 +21,7 @@ const requestListWeatherData = async (locationIds: number[]) => {
   console.log('requesting list');
   try {
     const response = await Axios.get(
-      `${SERVICE_URL}group?id=${locationIds}&units=metric&APPID=${process.env.REACT_APP_WEATHER_API_ID}a`
+      `${SERVICE_URL}group?id=${locationIds}&units=metric&APPID=${process.env.REACT_APP_WEATHER_API_ID}`
     );
 
     return response.data.list as WeatherDataResponse[];
