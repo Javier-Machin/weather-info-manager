@@ -24,7 +24,7 @@ const App: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState<FormattedWeatherData | null>(null);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
 
-  const handleRequestListWeather = useCallback(async () => {
+  const handleRequestListWeather = useCallback(async (shouldPreventSetState) => {
     setErrorMessage(null);
     if (localAvailable) {
       const localWeatherData = getDataFromLocal('weatherData');
@@ -36,15 +36,18 @@ const App: React.FC = () => {
       if (localWeatherData) {
         const localCitiesIds = localWeatherData.map((city) => city.cityId);
         const serviceResponse = await requestListWeatherData(localCitiesIds);
+        const preventSetState = shouldPreventSetState();
 
         if (Array.isArray(serviceResponse)) {
           const formattedData = formatWeatherData(serviceResponse);
           saveDataToLocal('weatherData', formattedData);
-          setWeatherData(formattedData);
+          if (!preventSetState) setWeatherData(formattedData);
         } else {
           // If the local data can't be updated, load the last known data
-          setWeatherData(localWeatherData);
-          setErrorMessage(serviceResponse);
+          if (!preventSetState) {
+            setWeatherData(localWeatherData);
+            setErrorMessage(serviceResponse);
+          }
         }
         return;
       }
@@ -53,11 +56,12 @@ const App: React.FC = () => {
     // If we don't have cities in local, fetch the top 15 by population and save them
     const top15CitiesIds = Object.values(listCitiesIdMap);
     const serviceResponse = await requestListWeatherData(top15CitiesIds);
+    const preventSetState = shouldPreventSetState();
 
     if (Array.isArray(serviceResponse)) {
       const formattedData = formatWeatherData(serviceResponse);
       if (localAvailable) saveDataToLocal('weatherData', formattedData);
-      setWeatherData(formattedData);
+      if (!preventSetState) setWeatherData(formattedData);
       return;
     }
 
@@ -95,7 +99,14 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    handleRequestListWeather();
+    // Check to prevent changing state on unmounted component warning
+    let preventSetState = false;
+    const shouldPreventSetState = () => preventSetState;
+
+    handleRequestListWeather(shouldPreventSetState);
+    return () => {
+      preventSetState = true;
+    };
   }, [handleRequestListWeather]);
 
   const cityCanBeAddedToList = (name: string) => {
