@@ -1,9 +1,15 @@
-import { WeatherDataResponse, FormattedWeatherData, Note, LocalData } from '../models';
+import {
+  WeatherDataResponse,
+  FormattedWeatherData,
+  Note,
+  LocalData,
+  Favorite,
+} from '../models';
 
 // Remove not needed keys and improve format
 
 const formatWeatherData = (weatherData: WeatherDataResponse[]) => {
-  const formattedData: FormattedWeatherData[] = weatherData.map((data) => {
+  return weatherData.map((data) => {
     return {
       cityId: data.id,
       name: data.name,
@@ -14,11 +20,8 @@ const formatWeatherData = (weatherData: WeatherDataResponse[]) => {
       clouds: data.clouds.all,
       windSpeed: Math.round(data.wind.speed * 3.6), // convert to Km/h
       description: data.weather[0].description,
-      favorite: false,
     };
-  });
-  const formattedDataWithFavorites = setFavoritesFromLocal(formattedData);
-  return formattedDataWithFavorites;
+  }) as FormattedWeatherData[];
 };
 
 /*
@@ -59,39 +62,29 @@ const localStorageAvailable = () => {
   }
 };
 
-const saveDataToLocal = (key: string, data: FormattedWeatherData[] | Note[]) => {
+const saveDataToLocal = (key: string, data: FormattedWeatherData[] | Note[] | Favorite[]) => {
   localStorage.setItem(key, JSON.stringify(data));
 };
 
 function getDataFromLocal(key: 'notes'): Note[] | null;
 function getDataFromLocal(key: 'weatherData'): FormattedWeatherData[] | null;
-function getDataFromLocal(key: 'notes' | 'weatherData'): LocalData {
-  if (key === 'notes') {
-    const data = localStorage.getItem(key);
-    return data ? (JSON.parse(data) as Note[]) : null;
-  } else {
-    const data = localStorage.getItem(key);
-    return data ? (JSON.parse(data) as FormattedWeatherData[]) : null;
+function getDataFromLocal(key: 'favorites'): Favorite[] | null;
+function getDataFromLocal(key: 'notes' | 'weatherData' | 'favorites'): LocalData {
+  let data;
+  switch (key) {
+    case 'notes':
+      data = localStorage.getItem(key);
+      return data ? (JSON.parse(data) as Note[]) : null;
+    case 'weatherData':
+      data = localStorage.getItem(key);
+      return data ? (JSON.parse(data) as FormattedWeatherData[]) : null;
+    case 'favorites':
+      data = localStorage.getItem(key);
+      return data ? (JSON.parse(data) as Favorite[]) : null;
+    default:
+      return null;
   }
 }
-
-const setFavoritesFromLocal = (data: FormattedWeatherData[]) => {
-  const localWeatherData = getDataFromLocal('weatherData');
-  let localCitiesFavorites: string[] = [];
-
-  if (localWeatherData) {
-    localCitiesFavorites = localWeatherData
-      .filter((city) => city.favorite)
-      .map((city) => city.name);
-
-    return data.map((city) => {
-      city.favorite = localCitiesFavorites.includes(city.name);
-      return city;
-    });
-  }
-
-  return data;
-};
 
 const getUserCoordinates = () => {
   return new Promise<any>((resolve, _) => {

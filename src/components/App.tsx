@@ -94,14 +94,6 @@ const App: React.FC = () => {
     setWeatherData(updatedCities);
   };
 
-  const handleToggleCityFavorite = (cityName: string) => {
-    const cityToUpdateIndex = weatherData.findIndex((city) => city.name === cityName);
-    const updatedCities = [...weatherData];
-    updatedCities[cityToUpdateIndex].favorite = !weatherData[cityToUpdateIndex].favorite;
-    if (localAvailable) saveDataToLocal('weatherData', updatedCities);
-    setWeatherData(updatedCities);
-  };
-
   useEffect(() => {
     handleRequestListWeather();
   }, [handleRequestListWeather]);
@@ -139,7 +131,6 @@ const App: React.FC = () => {
         </Fragment>
       ) : (
         <CityList
-          toggleCityFavorite={handleToggleCityFavorite}
           deleteCityFromList={handleDeleteCityFromList}
           setSelectedCity={setSelectedCity}
           listWeatherData={weatherData}

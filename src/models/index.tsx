@@ -26,7 +26,6 @@ export interface FormattedWeatherData {
   clouds: number;
   windSpeed: number;
   description: string;
-  favorite: boolean;
 }
 
 export interface Note {
@@ -44,4 +43,8 @@ export interface CoordinatesObj {
   longitude: number;
 }
 
-export type LocalData = Note[] | FormattedWeatherData[] | null;
+export interface Favorite {
+  name: string;
+}
+
+export type LocalData = Note[] | FormattedWeatherData[] | Favorite[] | null;
