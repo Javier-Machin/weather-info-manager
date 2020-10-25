@@ -24,11 +24,9 @@ const CityList: React.FC<CityListProps> = (props) => {
     const updatedFavorites = [...favorites];
     const cityToUpdateIndex = favorites.findIndex((city) => city.name === cityName);
 
-    if (cityToUpdateIndex >= 0) {
-      updatedFavorites.splice(cityToUpdateIndex, 1);
-    } else {
-      updatedFavorites.push({ name: cityName });
-    }
+    cityToUpdateIndex >= 0
+      ? updatedFavorites.splice(cityToUpdateIndex, 1)
+      : updatedFavorites.push({ name: cityName });
 
     if (localAvailable) saveDataToLocal('favorites', updatedFavorites);
     setFavorites(updatedFavorites);

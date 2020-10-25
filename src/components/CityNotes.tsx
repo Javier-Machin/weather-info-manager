@@ -20,19 +20,17 @@ const CityNotes: React.FC<CityNotesProps> = (props) => {
   const handleAddNote = () => {
     const newNote = { id: uuidv4(), value: '', location: cityName };
 
-    if (!notes) {
-      if (localAvailable) saveDataToLocal('notes', [newNote]);
-      setNotes([newNote]);
-    } else {
-      if (localAvailable) saveDataToLocal('notes', [newNote, ...notes]);
-      setNotes([newNote, ...notes]);
-    }
+    const updatedNotes = notes ? [newNote, ...notes] : [newNote];
+
+    if (localAvailable) saveDataToLocal('notes', updatedNotes);
+    setNotes(updatedNotes);
   };
 
   const handleUpdateLocalNotes = debounce((id: string, value: string) => {
+    const updatedNotes = [...notes!];
     const noteIndex = notes!.findIndex((note) => note.id === id);
-    notes![noteIndex].value = value;
-    if (localAvailable) saveDataToLocal('notes', [...notes!]);
+    updatedNotes[noteIndex].value = value;
+    if (localAvailable) saveDataToLocal('notes', updatedNotes);
   }, 150);
 
   const handleDeleteNote = (id: string) => {
