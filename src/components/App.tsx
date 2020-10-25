@@ -24,66 +24,23 @@ const App: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState<FormattedWeatherData | null>(null);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
 
-  const handleRequestListWeather = useCallback(async (shouldPreventSetState) => {
-    setErrorMessage(null);
-    if (localAvailable) {
-      const localWeatherData = getDataFromLocal('weatherData');
-
-      // The user manually deleted all cities from list
-      if (localWeatherData && !localWeatherData.length) return;
-
-      // If we have a list of cities in local storage, update their weather data
-      if (localWeatherData) {
-        const localCitiesIds = localWeatherData.map((city) => city.cityId);
-        const serviceResponse = await requestListWeatherData(localCitiesIds);
-        const preventSetState = shouldPreventSetState();
-
-        if (Array.isArray(serviceResponse)) {
-          const formattedData = formatWeatherData(serviceResponse);
-          saveDataToLocal('weatherData', formattedData);
-          if (!preventSetState) setWeatherData(formattedData);
-        } else {
-          // If the local data can't be updated, load the last known data
-          if (!preventSetState) {
-            setWeatherData(localWeatherData);
-            setErrorMessage(serviceResponse);
-          }
-        }
-        return;
-      }
-    }
-
-    // If we don't have cities in local, fetch the top 15 by population and save them
-    const top15CitiesIds = Object.values(listCitiesIdMap);
-    const serviceResponse = await requestListWeatherData(top15CitiesIds);
-    const preventSetState = shouldPreventSetState();
-
-    if (Array.isArray(serviceResponse)) {
-      const formattedData = formatWeatherData(serviceResponse);
-      if (localAvailable) saveDataToLocal('weatherData', formattedData);
-      if (!preventSetState) setWeatherData(formattedData);
-      return;
-    }
-
-    // If we reach this we have a service error
-    setErrorMessage(serviceResponse);
-  }, []);
-
   const handleUserLocationWeather = async () => {
     setErrorMessage(null);
     const locationResponse = await getUserCoordinates();
+    const userLocationAvailable = Array.isArray(locationResponse);
     let serviceResponse;
 
-    if (Array.isArray(locationResponse)) {
+    if (userLocationAvailable) {
       serviceResponse = await requestWeatherByCoords(locationResponse[0]);
       if (Array.isArray(serviceResponse)) {
         const formattedData = formatWeatherData(serviceResponse);
         setSelectedCity(formattedData[0]);
-        return;
+      } else {
+        setErrorMessage(serviceResponse);
       }
+    } else {
+      setErrorMessage(locationResponse);
     }
-    // If we reach this we have a service error or a location error
-    serviceResponse ? setErrorMessage(serviceResponse) : setErrorMessage(locationResponse);
   };
 
   const handleAddCityToList = (city: FormattedWeatherData) => {
@@ -98,16 +55,70 @@ const App: React.FC = () => {
     setWeatherData(updatedCities);
   };
 
+  const setLocalListWeatherData = async (
+    localWeatherData: FormattedWeatherData[],
+    shouldPreventSetState: () => boolean
+  ) => {
+    const localCitiesIds = localWeatherData.map((city) => city.cityId);
+    const serviceResponse = await requestListWeatherData(localCitiesIds);
+    const preventSetState = shouldPreventSetState();
+
+    // Set an updated version of the list
+    if (Array.isArray(serviceResponse)) {
+      const formattedData = formatWeatherData(serviceResponse);
+      saveDataToLocal('weatherData', formattedData);
+      if (!preventSetState) setWeatherData(formattedData);
+    } else {
+      // If the local data can't be updated, load the last known data
+      if (!preventSetState) {
+        setWeatherData(localWeatherData);
+        setErrorMessage(serviceResponse);
+      }
+    }
+  };
+
+  const setTop15Cities = async (shouldPreventSetState: () => boolean) => {
+    const top15CitiesIds = Object.values(listCitiesIdMap);
+    const serviceResponse = await requestListWeatherData(top15CitiesIds);
+    const preventSetState = shouldPreventSetState();
+
+    if (Array.isArray(serviceResponse)) {
+      const formattedData = formatWeatherData(serviceResponse);
+      if (localAvailable) saveDataToLocal('weatherData', formattedData);
+      if (!preventSetState) setWeatherData(formattedData);
+    } else {
+      setErrorMessage(serviceResponse);
+    }
+  };
+
+  const requestListWeather = useCallback(async (shouldPreventSetState) => {
+    setErrorMessage(null);
+    if (localAvailable) {
+      const localWeatherData = getDataFromLocal('weatherData');
+
+      // The user manually deleted all cities from the list
+      if (localWeatherData && !localWeatherData.length) return;
+
+      // If we have a list of cities in local storage, set it
+      if (localWeatherData) {
+        setLocalListWeatherData(localWeatherData, shouldPreventSetState);
+        return;
+      }
+    }
+    // If we don't have cities in local, fetch the top 15 by population and set them
+    setTop15Cities(shouldPreventSetState);
+  }, []);
+
   useEffect(() => {
     // Check to prevent changing state on unmounted component warning
     let preventSetState = false;
     const shouldPreventSetState = () => preventSetState;
 
-    handleRequestListWeather(shouldPreventSetState);
+    requestListWeather(shouldPreventSetState);
     return () => {
       preventSetState = true;
     };
-  }, [handleRequestListWeather]);
+  }, [requestListWeather]);
 
   const cityCanBeAddedToList = (name: string) => {
     return !weatherData.find((city) => city.name === name) && weatherData.length < 20;
