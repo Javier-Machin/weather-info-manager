@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from '../components/App';
 import { mockGetListAPIresponse } from './helpers';
+import { LocalStorageMock } from '@react-mock/localstorage';
 
 describe('Weather info manager', () => {
   let container: Element;
@@ -11,7 +12,11 @@ describe('Weather info manager', () => {
   });
 
   beforeEach(() => {
-    const app = render(<App />);
+    const app = render(
+      <LocalStorageMock items={{}}>
+        <App />
+      </LocalStorageMock>
+    );
     container = app.container;
   });
 

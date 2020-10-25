@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import CityList from '../../components/CityList';
 import { FormattedWeatherData } from '../../models';
+import { LocalStorageMock } from '@react-mock/localstorage';
 
 const mockWeatherData = [
   {
@@ -14,7 +15,6 @@ const mockWeatherData = [
     clouds: 53,
     windSpeed: 3,
     description: 'Sunny',
-    favorite: false,
   },
   {
     cityId: 435453,
@@ -26,24 +26,23 @@ const mockWeatherData = [
     clouds: 53,
     windSpeed: 3,
     description: 'Rainy',
-    favorite: true,
   },
 ] as FormattedWeatherData[];
 
 const mockSetSelectedCity = jest.fn(() => {});
-const mocktoggleCityFavorite = jest.fn((name: string) => {});
 const mockdeleteCityFromList = jest.fn((name: string) => {});
 let container: Element;
 
 describe('CityList', () => {
   beforeEach(() => {
     const component = render(
-      <CityList
-        toggleCityFavorite={mocktoggleCityFavorite}
-        deleteCityFromList={mockdeleteCityFromList}
-        setSelectedCity={mockSetSelectedCity}
-        listWeatherData={mockWeatherData}
-      />
+      <LocalStorageMock items={{ favorites: JSON.stringify([{ name: 'Madrid' }]) }}>
+        <CityList
+          deleteCityFromList={mockdeleteCityFromList}
+          setSelectedCity={mockSetSelectedCity}
+          listWeatherData={mockWeatherData}
+        />
+      </LocalStorageMock>
     );
 
     container = component.container;
