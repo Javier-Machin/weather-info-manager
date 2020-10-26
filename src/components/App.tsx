@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import CityList from './CityList';
 import CityNotes from './CityNotes';
 import CityDetails from './CityDetails';
@@ -91,8 +91,11 @@ const App: React.FC = () => {
     }
   };
 
-  const requestListWeather = useCallback(async (shouldPreventSetState) => {
-    setErrorMessage(null);
+  useEffect(() => {
+    // Check to prevent changing state on unmounted component warning
+    let preventSetState = false;
+    const shouldPreventSetState = () => preventSetState;
+
     if (localAvailable) {
       const localWeatherData = getDataFromLocal('weatherData');
 
@@ -107,18 +110,11 @@ const App: React.FC = () => {
     }
     // If we don't have cities in local, fetch the top 15 by population and set them
     setTop15Cities(shouldPreventSetState);
-  }, []);
 
-  useEffect(() => {
-    // Check to prevent changing state on unmounted component warning
-    let preventSetState = false;
-    const shouldPreventSetState = () => preventSetState;
-
-    requestListWeather(shouldPreventSetState);
     return () => {
       preventSetState = true;
     };
-  }, [requestListWeather]);
+  }, []);
 
   const cityCanBeAddedToList = (name: string) => {
     return !weatherData.find((city) => city.name === name) && weatherData.length < 20;
@@ -129,17 +125,17 @@ const App: React.FC = () => {
   };
 
   return (
-    <main className="App">
+    <main className='App'>
       {!!errorMessage && (
         <ErrorMessageBanner errorMessage={errorMessage} clearErrors={handleClearErrors} />
       )}
-      <h3 className="main-title">Weather Info Manager</h3>
+      <h3 className='main-title'>Weather Info Manager</h3>
       <CitySearch setSelectedCity={setSelectedCity} setErrorMessage={setErrorMessage} />
       <Button
         onClick={handleUserLocationWeather}
-        text="Check local weather"
-        btnType="button"
-        btnClasses="button-user-location"
+        text='Check local weather'
+        btnType='button'
+        btnClasses='button-user-location'
       />
       {selectedCity ? (
         <Fragment>
