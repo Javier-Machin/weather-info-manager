@@ -18,7 +18,7 @@ Some of its features are:
 * Clone the repo
 * Create a .env file in the root of the project
 * Add to the file `REACT_APP_WEATHER_API_ID=placeholder`
-* Replace `placeholder` with your openweathermap key (One was provided by email)
+* Replace `placeholder` with your openweathermap key
 * Save the file
 * `npm install`
 * `npm start`
