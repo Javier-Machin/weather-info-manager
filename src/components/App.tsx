@@ -55,46 +55,40 @@ const App: React.FC = () => {
     setWeatherData(updatedCities);
   };
 
-  const setLocalListWeatherData = async (
-    localWeatherData: FormattedWeatherData[],
-    shouldPreventSetState: () => boolean
-  ) => {
-    const localCitiesIds = localWeatherData.map((city) => city.cityId);
-    const serviceResponse = await requestListWeatherData(localCitiesIds);
-    const preventSetState = shouldPreventSetState();
-
-    // Set an updated version of the list
-    if (Array.isArray(serviceResponse)) {
-      const formattedData = formatWeatherData(serviceResponse);
-      saveDataToLocal('weatherData', formattedData);
-      if (!preventSetState) setWeatherData(formattedData);
-    } else {
-      // If the local data can't be updated, load the last known data
-      if (!preventSetState) {
-        setWeatherData(localWeatherData);
-        setErrorMessage(serviceResponse);
-      }
-    }
-  };
-
-  const setTop15Cities = async (shouldPreventSetState: () => boolean) => {
-    const top15CitiesIds = Object.values(listCitiesIdMap);
-    const serviceResponse = await requestListWeatherData(top15CitiesIds);
-    const preventSetState = shouldPreventSetState();
-
-    if (Array.isArray(serviceResponse)) {
-      const formattedData = formatWeatherData(serviceResponse);
-      if (localAvailable) saveDataToLocal('weatherData', formattedData);
-      if (!preventSetState) setWeatherData(formattedData);
-    } else {
-      setErrorMessage(serviceResponse);
-    }
-  };
-
   useEffect(() => {
     // Check to prevent changing state on unmounted component warning
     let preventSetState = false;
-    const shouldPreventSetState = () => preventSetState;
+
+    const setLocalListWeatherData = async (localWeatherData: FormattedWeatherData[]) => {
+      const localCitiesIds = localWeatherData.map((city) => city.cityId);
+      const serviceResponse = await requestListWeatherData(localCitiesIds);
+
+      // Set an updated version of the list
+      if (Array.isArray(serviceResponse)) {
+        const formattedData = formatWeatherData(serviceResponse);
+        saveDataToLocal('weatherData', formattedData);
+        if (!preventSetState) setWeatherData(formattedData);
+      } else {
+        // If the local data can't be updated, load the last known data
+        if (!preventSetState) {
+          setWeatherData(localWeatherData);
+          setErrorMessage(serviceResponse);
+        }
+      }
+    };
+
+    const setTop15Cities = async () => {
+      const top15CitiesIds = Object.values(listCitiesIdMap);
+      const serviceResponse = await requestListWeatherData(top15CitiesIds);
+
+      if (Array.isArray(serviceResponse)) {
+        const formattedData = formatWeatherData(serviceResponse);
+        if (localAvailable) saveDataToLocal('weatherData', formattedData);
+        if (!preventSetState) setWeatherData(formattedData);
+      } else {
+        setErrorMessage(serviceResponse);
+      }
+    };
 
     if (localAvailable) {
       const localWeatherData = getDataFromLocal('weatherData');
@@ -104,12 +98,13 @@ const App: React.FC = () => {
 
       // If we have a list of cities in local storage, set it
       if (localWeatherData) {
-        setLocalListWeatherData(localWeatherData, shouldPreventSetState);
+        setLocalListWeatherData(localWeatherData);
         return;
       }
     }
+
     // If we don't have cities in local, fetch the top 15 by population and set them
-    setTop15Cities(shouldPreventSetState);
+    setTop15Cities();
 
     return () => {
       preventSetState = true;
@@ -125,17 +120,17 @@ const App: React.FC = () => {
   };
 
   return (
-    <main className='App'>
+    <main className="App">
       {!!errorMessage && (
         <ErrorMessageBanner errorMessage={errorMessage} clearErrors={handleClearErrors} />
       )}
-      <h3 className='main-title'>Weather Info Manager</h3>
+      <h3 className="main-title">Weather Info Manager</h3>
       <CitySearch setSelectedCity={setSelectedCity} setErrorMessage={setErrorMessage} />
       <Button
         onClick={handleUserLocationWeather}
-        text='Check local weather'
-        btnType='button'
-        btnClasses='button-user-location'
+        text="Check local weather"
+        btnType="button"
+        btnClasses="button-user-location"
       />
       {selectedCity ? (
         <Fragment>
